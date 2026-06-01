@@ -1,0 +1,6 @@
+[
+  {
+    "type": "text",
+    "text": "{\"aggregations\": {\"by_sentiment\": [{\"sentiment\": \"positive\", \"count\": 38}, {\"sentiment\": \"neutral\", \"count\": 20}, {\"sentiment\": \"negative\", \"count\": 9}]}}"
+  }
+]

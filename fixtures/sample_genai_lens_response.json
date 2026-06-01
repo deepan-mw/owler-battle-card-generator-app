@@ -1,0 +1,13 @@
+{
+  "_note": "REPRESENTATIVE shape of a genai_lens_brandAnalysis response, for mapper testing only. NOT live data. Adjust _map_genai_lens key names to the real API once access lands.",
+  "overview": "ChatGPT and Claude rank Salesforce #1 for 'best enterprise CRM' but cite cost; the customer appears #3 with stronger ease-of-use framing.",
+  "visibilityScore": 91,
+  "competitorVisibilityScore": 58,
+  "models": [
+    { "provider": "openai-gpt-4o", "characterization": "Market leader, enterprise-grade, costly.", "categoryRank": 1 },
+    { "provider": "anthropic-claude", "characterization": "Comprehensive but steep learning curve.", "categoryRank": 1 },
+    { "provider": "google-gemini", "characterization": "Strong ecosystem, complex pricing.", "categoryRank": 2 }
+  ],
+  "strengthAspects": [ { "aspect": "market position" }, { "aspect": "ecosystem breadth" } ],
+  "weaknessAspects": [ { "aspect": "ease of use" }, { "aspect": "total cost" } ]
+}

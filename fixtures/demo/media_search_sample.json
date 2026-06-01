@@ -1,0 +1,515 @@
+{
+  "companies": [
+    {
+      "request": {
+        "domain": "salesforce.com",
+        "days_back": 7,
+        "max_results": 10
+      },
+      "mira_search_media_news": {
+        "total_articles": 847,
+        "sentiment_summary": {
+          "positive": 0.52,
+          "neutral": 0.35,
+          "negative": 0.13
+        },
+        "volume_trend": [
+          {
+            "date": "2026-05-24",
+            "count": 98
+          },
+          {
+            "date": "2026-05-25",
+            "count": 112
+          },
+          {
+            "date": "2026-05-26",
+            "count": 89
+          },
+          {
+            "date": "2026-05-27",
+            "count": 143
+          },
+          {
+            "date": "2026-05-28",
+            "count": 201
+          },
+          {
+            "date": "2026-05-29",
+            "count": 115
+          },
+          {
+            "date": "2026-05-30",
+            "count": 89
+          }
+        ],
+        "top_topics": [
+          {
+            "topic": "Agentforce AI",
+            "mention_count": 312,
+            "sentiment": "positive"
+          },
+          {
+            "topic": "Earnings / Revenue",
+            "mention_count": 189,
+            "sentiment": "positive"
+          },
+          {
+            "topic": "Layoffs / Restructuring",
+            "mention_count": 94,
+            "sentiment": "negative"
+          },
+          {
+            "topic": "Partnership - AWS",
+            "mention_count": 67,
+            "sentiment": "positive"
+          },
+          {
+            "topic": "Slack Acquisition ROI",
+            "mention_count": 54,
+            "sentiment": "neutral"
+          }
+        ],
+        "top_journalists": [
+          {
+            "name": "Stephanie Condon",
+            "outlet": "ZDNet",
+            "article_count": 8
+          },
+          {
+            "name": "Ron Miller",
+            "outlet": "TechCrunch",
+            "article_count": 6
+          },
+          {
+            "name": "Tom Foremski",
+            "outlet": "Silicon Valley Watcher",
+            "article_count": 5
+          }
+        ],
+        "articles": [
+          {
+            "id": "art-sf-001",
+            "title": "Salesforce Agentforce 2.0 Sets New Bar for AI CRM Automation",
+            "source": "TechCrunch",
+            "url": "https://techcrunch.com/2026/05/28/salesforce-agentforce-2",
+            "published_at": "2026-05-28T09:15:00Z",
+            "sentiment": "positive",
+            "sentiment_score": 0.78,
+            "summary": "Salesforce's Agentforce 2.0 introduces autonomous agents capable of running multi-step sales workflows without human intervention. Early enterprise customers report 30% reduction in manual CRM data entry.",
+            "topics": [
+              "Agentforce AI",
+              "Product Launch"
+            ],
+            "reach": 2400000
+          },
+          {
+            "id": "art-sf-002",
+            "title": "Salesforce Q4 FY26 Earnings Beat: Revenue $9.8B, Stock Up 6%",
+            "source": "Wall Street Journal",
+            "url": "https://wsj.com/2026/03/01/salesforce-q4-fy26",
+            "published_at": "2026-03-01T16:00:00Z",
+            "sentiment": "positive",
+            "sentiment_score": 0.82,
+            "summary": "Salesforce beat Q4 estimates driven by AI add-on attach rates. CEO Marc Benioff cited Agentforce as 'the biggest product in our history'.",
+            "topics": [
+              "Earnings / Revenue"
+            ],
+            "reach": 8100000
+          },
+          {
+            "id": "art-sf-003",
+            "title": "Salesforce Cuts 1,000 Jobs in Latest Restructuring Wave",
+            "source": "Bloomberg",
+            "url": "https://bloomberg.com/2026/04/10/salesforce-layoffs",
+            "published_at": "2026-04-10T14:30:00Z",
+            "sentiment": "negative",
+            "sentiment_score": -0.61,
+            "summary": "Salesforce eliminated approximately 1,000 roles primarily in professional services and legacy product teams as the company doubles down on AI-native product lines.",
+            "topics": [
+              "Layoffs / Restructuring"
+            ],
+            "reach": 5500000
+          },
+          {
+            "id": "art-sf-004",
+            "title": "Is Salesforce's Complexity Problem Unsolvable?",
+            "source": "Diginomica",
+            "url": "https://diginomica.com/2026/05/20/salesforce-complexity",
+            "published_at": "2026-05-20T11:00:00Z",
+            "sentiment": "negative",
+            "sentiment_score": -0.44,
+            "summary": "Analysts and practitioners continue to flag Salesforce's growing implementation complexity and high TCO as key objections in competitive deals, particularly for mid-market companies.",
+            "topics": [
+              "Product Criticism",
+              "Competition"
+            ],
+            "reach": 420000
+          },
+          {
+            "id": "art-sf-005",
+            "title": "Salesforce and AWS Deepen Partnership Around Einstein and Bedrock",
+            "source": "ZDNet",
+            "url": "https://zdnet.com/2026/02/10/salesforce-aws-partnership",
+            "published_at": "2026-02-10T10:00:00Z",
+            "sentiment": "positive",
+            "sentiment_score": 0.65,
+            "summary": "Salesforce and AWS announced expanded co-sell agreements and technical integration between Einstein AI and Amazon Bedrock, enabling customers to bring custom LLMs into Salesforce workflows.",
+            "topics": [
+              "Partnership - AWS"
+            ],
+            "reach": 1800000
+          }
+        ]
+      }
+    },
+    {
+      "request": {
+        "domain": "hubspot.com",
+        "days_back": 7,
+        "max_results": 10
+      },
+      "mira_search_media_news": {
+        "total_articles": 312,
+        "sentiment_summary": {
+          "positive": 0.61,
+          "neutral": 0.28,
+          "negative": 0.11
+        },
+        "volume_trend": [
+          {
+            "date": "2026-05-24",
+            "count": 32
+          },
+          {
+            "date": "2026-05-25",
+            "count": 41
+          },
+          {
+            "date": "2026-05-26",
+            "count": 38
+          },
+          {
+            "date": "2026-05-27",
+            "count": 67
+          },
+          {
+            "date": "2026-05-28",
+            "count": 58
+          },
+          {
+            "date": "2026-05-29",
+            "count": 44
+          },
+          {
+            "date": "2026-05-30",
+            "count": 32
+          }
+        ],
+        "top_topics": [
+          {
+            "topic": "Breeze AI Copilot",
+            "mention_count": 124,
+            "sentiment": "positive"
+          },
+          {
+            "topic": "SMB CRM Market",
+            "mention_count": 87,
+            "sentiment": "positive"
+          },
+          {
+            "topic": "Salesforce Competition",
+            "mention_count": 56,
+            "sentiment": "neutral"
+          },
+          {
+            "topic": "EMEA Expansion",
+            "mention_count": 31,
+            "sentiment": "positive"
+          }
+        ],
+        "top_journalists": [
+          {
+            "name": "Kyle Poyar",
+            "outlet": "OpenView",
+            "article_count": 4
+          },
+          {
+            "name": "Anna Heim",
+            "outlet": "TechCrunch",
+            "article_count": 3
+          }
+        ],
+        "articles": [
+          {
+            "id": "art-hs-001",
+            "title": "HubSpot's Breeze AI Is the Antidote to Salesforce Complexity",
+            "source": "Forbes",
+            "url": "https://forbes.com/2026/05/03/hubspot-breeze-ai",
+            "published_at": "2026-05-03T09:00:00Z",
+            "sentiment": "positive",
+            "sentiment_score": 0.81,
+            "summary": "HubSpot's Breeze AI Copilot launch is being praised for its ease of use versus rivals. Analysts note that HubSpot is winning deals specifically where Salesforce complexity is the primary objection.",
+            "topics": [
+              "Breeze AI Copilot",
+              "Salesforce Competition"
+            ],
+            "reach": 3200000
+          },
+          {
+            "id": "art-hs-002",
+            "title": "HubSpot Reports Q1 FY26 Revenue of $686M, Beats Estimates",
+            "source": "Reuters",
+            "url": "https://reuters.com/2026/04/02/hubspot-q1-fy26",
+            "published_at": "2026-04-02T13:00:00Z",
+            "sentiment": "positive",
+            "sentiment_score": 0.73,
+            "summary": "HubSpot posted Q1 revenue of $686M, +16% YoY, with AI-assisted features driving higher average contract value. Operating margin improved to 14%, up from 11% prior year.",
+            "topics": [
+              "Earnings / Revenue"
+            ],
+            "reach": 4100000
+          },
+          {
+            "id": "art-hs-003",
+            "title": "HubSpot Expands EMEA Footprint with New Dublin HQ",
+            "source": "Business Post",
+            "url": "https://businesspost.ie/2026/02/01/hubspot-dublin",
+            "published_at": "2026-02-01T08:30:00Z",
+            "sentiment": "positive",
+            "sentiment_score": 0.69,
+            "summary": "HubSpot opened its new European headquarters in Dublin, Ireland, adding 300 jobs. The company says EMEA is its fastest-growing region, contributing 38% of new bookings in FY25.",
+            "topics": [
+              "EMEA Expansion"
+            ],
+            "reach": 890000
+          }
+        ]
+      }
+    },
+    {
+      "request": {
+        "domain": "microsoft.com",
+        "days_back": 7,
+        "max_results": 10
+      },
+      "mira_search_media_news": {
+        "total_articles": 612,
+        "sentiment_summary": {
+          "positive": 0.49,
+          "neutral": 0.4,
+          "negative": 0.11
+        },
+        "volume_trend": [
+          {
+            "date": "2026-05-24",
+            "count": 70
+          },
+          {
+            "date": "2026-05-25",
+            "count": 82
+          },
+          {
+            "date": "2026-05-26",
+            "count": 75
+          },
+          {
+            "date": "2026-05-27",
+            "count": 118
+          },
+          {
+            "date": "2026-05-28",
+            "count": 160
+          },
+          {
+            "date": "2026-05-29",
+            "count": 96
+          },
+          {
+            "date": "2026-05-30",
+            "count": 81
+          }
+        ],
+        "top_topics": [
+          {
+            "topic": "Copilot",
+            "mention_count": 248,
+            "sentiment": "positive"
+          },
+          {
+            "topic": "Dynamics 365",
+            "mention_count": 121,
+            "sentiment": "positive"
+          },
+          {
+            "topic": "Earnings / Cloud",
+            "mention_count": 108,
+            "sentiment": "positive"
+          },
+          {
+            "topic": "Antitrust / Regulation",
+            "mention_count": 63,
+            "sentiment": "negative"
+          }
+        ],
+        "top_journalists": [
+          {
+            "name": "Mary Jo Foley",
+            "outlet": "Directions on Microsoft",
+            "article_count": 7
+          },
+          {
+            "name": "Tom Warren",
+            "outlet": "The Verge",
+            "article_count": 6
+          }
+        ],
+        "articles": [
+          {
+            "id": "art-ms-001",
+            "title": "Microsoft Expands Dynamics 365 Copilot With Autonomous Sales Agents",
+            "source": "The Verge",
+            "url": "https://www.theverge.com/2026/05/28/microsoft-dynamics-copilot-agents",
+            "published_at": "2026-05-28T10:00:00Z",
+            "sentiment": "positive",
+            "sentiment_score": 0.74,
+            "summary": "Microsoft brings autonomous AI agents to Dynamics 365 sales and field service, deepening the Copilot push against Salesforce Agentforce.",
+            "topics": [
+              "Copilot",
+              "Product Launch"
+            ],
+            "reach": 2100000
+          },
+          {
+            "id": "art-ms-002",
+            "title": "Microsoft Q3 FY26: Cloud Up 21%, Dynamics Accelerates",
+            "source": "CNBC",
+            "url": "https://www.cnbc.com/2026/04/25/microsoft-q3-fy26-earnings",
+            "published_at": "2026-04-25T20:30:00Z",
+            "sentiment": "positive",
+            "sentiment_score": 0.7,
+            "summary": "Microsoft beats estimates on cloud strength; Dynamics revenue up 18% as Copilot attach rates climb.",
+            "topics": [
+              "Earnings / Cloud"
+            ],
+            "reach": 1800000
+          },
+          {
+            "id": "art-ms-003",
+            "title": "Regulators Probe Microsoft's AI Bundling Practices",
+            "source": "Reuters",
+            "url": "https://www.reuters.com/technology/2026/05/20/microsoft-ai-bundling-probe",
+            "published_at": "2026-05-20T08:15:00Z",
+            "sentiment": "negative",
+            "sentiment_score": 0.32,
+            "summary": "Antitrust authorities examine whether Copilot bundling with M365 disadvantages CRM competitors.",
+            "topics": [
+              "Antitrust / Regulation"
+            ],
+            "reach": 1500000
+          }
+        ]
+      }
+    },
+    {
+      "request": {
+        "domain": "klue.com",
+        "days_back": 7,
+        "max_results": 10
+      },
+      "mira_search_media_news": {
+        "total_articles": 46,
+        "sentiment_summary": {
+          "positive": 0.5,
+          "neutral": 0.43,
+          "negative": 0.07
+        },
+        "volume_trend": [
+          {
+            "date": "2026-05-24",
+            "count": 6
+          },
+          {
+            "date": "2026-05-25",
+            "count": 5
+          },
+          {
+            "date": "2026-05-26",
+            "count": 7
+          },
+          {
+            "date": "2026-05-27",
+            "count": 6
+          },
+          {
+            "date": "2026-05-28",
+            "count": 8
+          },
+          {
+            "date": "2026-05-29",
+            "count": 7
+          },
+          {
+            "date": "2026-05-30",
+            "count": 7
+          }
+        ],
+        "top_topics": [
+          {
+            "topic": "Competitive Enablement",
+            "mention_count": 18,
+            "sentiment": "positive"
+          },
+          {
+            "topic": "Klue AI Compete Agent",
+            "mention_count": 12,
+            "sentiment": "positive"
+          },
+          {
+            "topic": "Funding / Growth",
+            "mention_count": 7,
+            "sentiment": "neutral"
+          }
+        ],
+        "top_journalists": [
+          {
+            "name": "Kyle Wiggers",
+            "outlet": "TechCrunch",
+            "article_count": 2
+          }
+        ],
+        "articles": [
+          {
+            "id": "art-kl-001",
+            "title": "Klue Launches AI 'Compete Agent' to Auto-Draft Battlecards",
+            "source": "TechCrunch",
+            "url": "https://techcrunch.com/2026/03/30/klue-ai-compete-agent",
+            "published_at": "2026-03-30T13:00:00Z",
+            "sentiment": "positive",
+            "sentiment_score": 0.72,
+            "summary": "Klue's new AI agent drafts and updates competitive battlecards automatically from public and internal signals.",
+            "topics": [
+              "Klue AI Compete Agent",
+              "Product Launch"
+            ],
+            "reach": 320000
+          },
+          {
+            "id": "art-kl-002",
+            "title": "Competitive Enablement Heats Up as Klue and Crayon Add AI",
+            "source": "SaaS Mag",
+            "url": "https://www.saasmag.com/2026/05/15/competitive-enablement-ai",
+            "published_at": "2026-05-15T09:30:00Z",
+            "sentiment": "neutral",
+            "sentiment_score": 0.55,
+            "summary": "The compete category accelerates AI features as buyers demand faster battlecard updates.",
+            "topics": [
+              "Competitive Enablement"
+            ],
+            "reach": 140000
+          }
+        ]
+      }
+    }
+  ]
+}

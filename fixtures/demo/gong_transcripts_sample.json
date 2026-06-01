@@ -1,0 +1,160 @@
+{
+  "nx_list_gong_calls": {
+    "total_calls": 20,
+    "calls": [
+      { "call_id": "gong-001", "date": "2026-05-28", "duration_min": 42, "rep": "Sarah Chen", "prospect": "TechCorp Inc", "stage": "Demo", "outcome": "moved_forward", "competitors_mentioned": ["salesforce"] },
+      { "call_id": "gong-002", "date": "2026-05-27", "duration_min": 31, "rep": "Marcus Webb", "prospect": "RetailGiant LLC", "stage": "Negotiation", "outcome": "closed_won", "competitors_mentioned": ["hubspot"] },
+      { "call_id": "gong-003", "date": "2026-05-26", "duration_min": 58, "rep": "Priya Nair", "prospect": "HealthSys Corp", "stage": "Discovery", "outcome": "moved_forward", "competitors_mentioned": ["crayon", "klue"] },
+      { "call_id": "gong-004", "date": "2026-05-25", "duration_min": 27, "rep": "James Liu", "prospect": "FinServ Partners", "stage": "Demo", "outcome": "stalled", "competitors_mentioned": ["salesforce", "hubspot"] },
+      { "call_id": "gong-005", "date": "2026-05-24", "duration_min": 45, "rep": "Sarah Chen", "prospect": "MediaHouse Group", "stage": "Closing", "outcome": "closed_lost", "competitors_mentioned": ["hubspot"] },
+      { "call_id": "gong-006", "date": "2026-05-23", "duration_min": 33, "rep": "Marcus Webb", "prospect": "EduTech Ltd", "stage": "Demo", "outcome": "moved_forward", "competitors_mentioned": ["salesforce"] },
+      { "call_id": "gong-007", "date": "2026-05-22", "duration_min": 50, "rep": "Priya Nair", "prospect": "AutoGroup NA", "stage": "Discovery", "outcome": "moved_forward", "competitors_mentioned": [] },
+      { "call_id": "gong-008", "date": "2026-05-21", "duration_min": 38, "rep": "James Liu", "prospect": "SaaS Unicorn Inc", "stage": "Negotiation", "outcome": "closed_won", "competitors_mentioned": ["salesforce"] },
+      { "call_id": "gong-009", "date": "2026-05-20", "duration_min": 29, "rep": "Ana Gomez", "prospect": "Pharma Global", "stage": "Demo", "outcome": "moved_forward", "competitors_mentioned": ["hubspot", "crayon"] },
+      { "call_id": "gong-010", "date": "2026-05-19", "duration_min": 61, "rep": "Sarah Chen", "prospect": "BankFirst Corp", "stage": "Discovery", "outcome": "stalled", "competitors_mentioned": ["salesforce"] },
+      { "call_id": "gong-011", "date": "2026-05-18", "duration_min": 44, "rep": "Marcus Webb", "prospect": "InsureTech Co", "stage": "Demo", "outcome": "moved_forward", "competitors_mentioned": ["klue"] },
+      { "call_id": "gong-012", "date": "2026-05-17", "duration_min": 36, "rep": "Priya Nair", "prospect": "LogisticsNow", "stage": "Closing", "outcome": "closed_won", "competitors_mentioned": [] },
+      { "call_id": "gong-013", "date": "2026-05-16", "duration_min": 52, "rep": "Ana Gomez", "prospect": "EnterpriseHR Ltd", "stage": "Demo", "outcome": "closed_lost", "competitors_mentioned": ["salesforce", "hubspot"] },
+      { "call_id": "gong-014", "date": "2026-05-15", "duration_min": 40, "rep": "James Liu", "prospect": "SmallBiz Pro", "stage": "Discovery", "outcome": "moved_forward", "competitors_mentioned": ["hubspot"] },
+      { "call_id": "gong-015", "date": "2026-05-14", "duration_min": 47, "rep": "Sarah Chen", "prospect": "GovTech Agency", "stage": "Negotiation", "outcome": "moved_forward", "competitors_mentioned": [] },
+      { "call_id": "gong-016", "date": "2026-05-13", "duration_min": 35, "rep": "Marcus Webb", "prospect": "RetailChain EU", "stage": "Demo", "outcome": "closed_won", "competitors_mentioned": ["hubspot"] },
+      { "call_id": "gong-017", "date": "2026-05-12", "duration_min": 29, "rep": "Priya Nair", "prospect": "TelecomBig", "stage": "Discovery", "outcome": "stalled", "competitors_mentioned": ["salesforce"] },
+      { "call_id": "gong-018", "date": "2026-05-11", "duration_min": 55, "rep": "Ana Gomez", "prospect": "NFP Foundation", "stage": "Demo", "outcome": "moved_forward", "competitors_mentioned": [] },
+      { "call_id": "gong-019", "date": "2026-05-10", "duration_min": 41, "rep": "James Liu", "prospect": "StartupRocket", "stage": "Discovery", "outcome": "closed_lost", "competitors_mentioned": ["hubspot"] },
+      { "call_id": "gong-020", "date": "2026-05-09", "duration_min": 48, "rep": "Sarah Chen", "prospect": "ConsultCo Global", "stage": "Closing", "outcome": "closed_won", "competitors_mentioned": ["salesforce", "klue"] }
+    ]
+  },
+  "nx_get_gong_curated_transcript": [
+    {
+      "call_id": "gong-001",
+      "transcript_excerpt": "Rep: ...so what you'll see here is our media monitoring dashboard, pulling real-time coverage across 200K+ sources.\nProspect: That's interesting. We're actually currently evaluating Salesforce Marketing Cloud for this. How do you compare?\nRep: Great question. Salesforce Marketing Cloud is strong for email orchestration, but their media monitoring is an add-on bolt-on. Ours is native. You also get social listening, influencer tracking, and our GenAI Lens AI perception tools — none of which Salesforce offers.\nProspect: The AI perception angle is new to me. Can you explain what that means practically?\nRep: Sure — GenAI Lens tracks how large language models like ChatGPT describe your brand. So you can see if prospects asking AI 'who should I use for enterprise comms' are getting your name or a competitor's name back. It's a category of data that didn't exist two years ago.\nProspect: That's actually something our CMO asked about last week. She was wondering if we show up in AI search results.\nRep: Exactly. And we can show you a visibility score, competitive gaps, and specific prompts where you're invisible today.",
+      "objections": [
+        {
+          "objection": "We're evaluating Salesforce for this.",
+          "category": "competitor_evaluation",
+          "suggested_talk_track": "Acknowledge Salesforce's strength in CRM/email, then pivot: Meltwater's media monitoring is native, not an add-on. Emphasize GenAI Lens as a differentiator Salesforce doesn't offer. Ask about their CMO's AI visibility concerns."
+        }
+      ],
+      "win_signals": ["Interest in GenAI Lens", "CMO asking about AI search visibility", "Moved to next stage"]
+    },
+    {
+      "call_id": "gong-002",
+      "transcript_excerpt": "Prospect: We've been using HubSpot for our marketing reporting but the social monitoring is weak.\nRep: That's a common reason customers come to us. HubSpot does marketing automation and CRM really well, but their social listening and media intelligence is limited to basic social channels — no print, broadcast, or earned media. What's the use case you're most frustrated with?\nProspect: Our PR team needs to track trade media coverage and we keep getting gaps.\nRep: Perfect — that's exactly where Meltwater shines. We cover 270K sources including trade publications, wire services, and broadcast transcripts. HubSpot just doesn't have that data.\nProspect: What about price? HubSpot is already on our contract.\nRep: We often co-exist with HubSpot — we're not replacing your CRM, we're filling the media and PR intelligence gap. Many customers run both.",
+      "objections": [
+        {
+          "objection": "HubSpot is already on our contract.",
+          "category": "existing_vendor",
+          "suggested_talk_track": "Position as complementary, not replacement. Meltwater fills the PR/media gap HubSpot explicitly doesn't address. Show that HubSpot's social listening score is <4/10 on G2 vs Meltwater's 8.2/10. Frame as a media intelligence layer on top of their existing CRM."
+        },
+        {
+          "objection": "Their social monitoring is weak but so might be the ROI.",
+          "category": "value_justification",
+          "suggested_talk_track": "Ask how they currently track earned media. Calculate cost of manual monitoring (FTE hours x rate). PR crises caught early have quantifiable value — share relevant case study."
+        }
+      ],
+      "win_signals": ["Specific pain point identified (trade media gaps)", "PR team involved", "Closed won"]
+    },
+    {
+      "call_id": "gong-003",
+      "transcript_excerpt": "Prospect: We're looking at Klue and Crayon for competitive intelligence. Why would we consider Meltwater?\nRep: Klue and Crayon are purpose-built CI tools — great for battlecards. But they're pulling data from the same public sources as each other: G2, Capterra, news, press releases. We have data they don't: real-time media monitoring at 270K sources, and GenAI Lens which shows you how AI models describe competitors right now.\nProspect: What's the difference between Klue and what you're proposing?\nRep: Klue gives you a static snapshot. We give you a live feed. And the Gong integration means your battlecards are fed by actual objections from your own sales calls, not generic templates from the internet.\nProspect: The Gong angle is interesting. We do use Gong.\nRep: Then you're sitting on competitive gold and not using it. Which specific competitors are most painful in deals right now?\nProspect: Honestly, it's usually legacy vendors — Oracle and SAP — in the enterprise space.",
+      "objections": [
+        {
+          "objection": "We're already looking at Klue and Crayon.",
+          "category": "competitor_evaluation",
+          "suggested_talk_track": "Acknowledge Klue/Crayon as solid CI tools. Differentiate on unique data: Meltwater media corpus + GenAI Lens + Gong integration = data Klue/Crayon cannot replicate. Offer to show a side-by-side coverage comparison for one of their key competitors."
+        }
+      ],
+      "win_signals": ["Uses Gong", "Interested in Gong integration", "Engaged on differentiation"]
+    },
+    {
+      "call_id": "gong-004",
+      "transcript_excerpt": "Prospect: We already use Salesforce and HubSpot. I'm not sure we need another tool.\nRep: I hear that — tool fatigue is real. Quick question: does Salesforce or HubSpot tell you what journalists are writing about your competitors this morning?\nProspect: No, we'd Google that.\nRep: Right. And does either tell you how ChatGPT describes your brand versus a competitor when a prospect asks it for recommendations?\nProspect: ...no.\nRep: Those are the two gaps we fill. We're not CRM, we're media and AI intelligence. Different budget, different buyer — usually the CMO or comms team, not RevOps.\nProspect: Our CMO might be interested. Can you put together a one-pager for her?",
+      "objections": [
+        {
+          "objection": "We already use Salesforce and HubSpot, don't need another tool.",
+          "category": "too_many_tools",
+          "suggested_talk_track": "Reframe: Meltwater is not competing with CRM or marketing automation. Ask pointed questions about media monitoring and AI visibility gaps — both are outside Salesforce/HubSpot scope. Redirect to a different budget owner (CMO, comms)."
+        }
+      ],
+      "win_signals": ["CMO interest identified", "Requested one-pager — moved to next stage"]
+    },
+    {
+      "call_id": "gong-005",
+      "transcript_excerpt": "Prospect: We went with HubSpot in the end. Their all-in-one platform matched our budget better and the team wanted to minimize vendors.\nRep: I understand — was media monitoring part of their pitch, or just the CRM/marketing side?\nProspect: Mainly CRM. Media monitoring wasn't a priority for this procurement.\nRep: That's fair. Worth keeping in mind that this is a gap in HubSpot's suite — if the need surfaces, we'd love a second look.\nProspect: Noted, I'll keep your contact.",
+      "objections": [
+        {
+          "objection": "We chose HubSpot for all-in-one simplicity and fewer vendors.",
+          "category": "closed_lost_vendor_consolidation",
+          "suggested_talk_track": "For future deals: surface media monitoring need earlier in discovery. Probe CMO and PR team before going to RevOps. All-in-one objection is harder to beat without a budget-level champion."
+        }
+      ],
+      "loss_signals": ["Media monitoring not a priority", "Vendor consolidation drive", "Closed lost"],
+      "lessons": "Surface PR/media use case earlier. Engage CMO separately before end of eval cycle."
+    },
+    {
+      "call_id": "gong-008",
+      "transcript_excerpt": "Prospect: Our VP Sales saw a Salesforce AI demo last week and is asking why Meltwater can't do the same.\nRep: What specifically did the Salesforce demo show?\nProspect: Agentforce — AI agents that automatically update CRM records from call transcripts.\nRep: That's a CRM workflow automation use case. We do something adjacent but different: we pull competitive intelligence from those same call transcripts and surface it as battlecards and market intelligence. Different problem — do you have a competitive enablement team?\nProspect: We do actually. Our sales ops runs battlecards manually right now.\nRep: Then I should show you how Gong transcripts feed automatically into our competitive intelligence layer. That's something Salesforce Agentforce doesn't do — they update records, we extract competitive insights.",
+      "objections": [
+        {
+          "objection": "Salesforce AI can do what you do.",
+          "category": "competitor_capability_claim",
+          "suggested_talk_track": "Clarify scope: Salesforce Agentforce is CRM record automation. Meltwater extracts competitive intelligence from conversations. Pivot to the sales ops battlecard pain — find the internal champion in that team."
+        }
+      ],
+      "win_signals": ["Sales ops runs battlecards manually — high pain", "Competitive enablement team exists", "Closed won"]
+    },
+    {
+      "call_id": "gong-009",
+      "transcript_excerpt": "Prospect: We trialed Crayon last year and didn't renew. Wasn't worth it.\nRep: That's useful context. What disappointed you?\nProspect: The battlecards felt generic. Data was always a few days stale and the team stopped trusting them.\nRep: That's the core problem with any tool that only scrapes public sources. Our differentiation is three things: Meltwater media data that's updated in near real-time, GenAI Lens for AI perception data that Crayon doesn't have, and Gong integration so your battlecards include actual objections from your own sales calls — not templates.\nProspect: The Gong part would help. That's what was missing before.",
+      "objections": [
+        {
+          "objection": "We tried Crayon and it wasn't worth the cost.",
+          "category": "prior_bad_experience_competitor",
+          "suggested_talk_track": "Probe for the exact failure mode. Generic/stale data is the most common. Position Meltwater's media corpus (real-time) + Gong integration (proprietary call data) as solving the trust problem directly. Offer a trial with their actual Gong data."
+        }
+      ],
+      "win_signals": ["Explicit disappointment with Crayon = entry point", "Gong integration resonated"]
+    },
+    {
+      "call_id": "gong-013",
+      "transcript_excerpt": "Rep: What does your competitive intelligence stack look like today?\nProspect: We use Salesforce for CRM, HubSpot for marketing, and we manually track competitors in a shared Google Sheet.\nRep: The Google Sheet tells me you haven't found a CI tool that sticks. What breaks down?\nProspect: Whoever is supposed to update it doesn't. It's always stale by the time reps need it.\nRep: That's the ownership problem. Our platform makes CI ambient — battlecards auto-refresh based on news, AI perception, and Gong calls. No one has to manually update.\nProspect: That sounds good but our IT team will ask about another vendor integration.\nRep: Fair. We integrate natively with Salesforce and HubSpot, so it's a layer, not a replacement. [Later] Prospect mentioned they got a very competitive offer from HubSpot to add CI features in their existing contract.\nRep: Understood — if HubSpot adds CI it will be basic. But their media corpus is small and they have no GenAI Lens equivalent. Ask them to show you AI visibility scores for your competitors — they won't have it.",
+      "objections": [
+        {
+          "objection": "HubSpot offered to add CI features to our existing contract.",
+          "category": "incumbent_expansion_offer",
+          "suggested_talk_track": "Acknowledge convenience. Then probe depth: Ask HubSpot to demo AI visibility scores, media coverage depth, and Gong transcript integration. These are gaps HubSpot cannot close short-term. The 'good enough' risk is real — escalate to CMO to demonstrate the AI perception gap specifically."
+        },
+        {
+          "objection": "IT will flag another vendor integration.",
+          "category": "it_complexity",
+          "suggested_talk_track": "Emphasize native Salesforce + HubSpot connectors. No custom dev needed. Security review docs available. Position as one API call, not a new system."
+        }
+      ],
+      "loss_signals": ["HubSpot incumbent expansion offer", "IT concern not resolved", "Closed lost"]
+    },
+    {
+      "call_id": "gong-019",
+      "transcript_excerpt": "Prospect: We're a 30-person startup. HubSpot's free CRM does everything we need and we can't afford another tool.\nRep: Totally makes sense at your stage. Quick question — does your CMO or founder track how you show up in AI tools like ChatGPT when prospects research you?\nProspect: Not formally, no.\nRep: That's the one thing HubSpot free won't give you. When you're ready, GenAI Lens is a standalone product — doesn't require the full Meltwater suite. Worth revisiting when that becomes a priority.\nProspect: I'll keep it in mind.",
+      "objections": [
+        {
+          "objection": "We're too small and HubSpot free covers our needs.",
+          "category": "budget_size",
+          "suggested_talk_track": "Don't push. Plant the GenAI Lens standalone seed. Frame AI visibility as a growth-stage need, not a large-company luxury. Stay in nurture track."
+        }
+      ],
+      "loss_signals": ["Startup, too early", "Closed lost — timing issue, not competitive loss"]
+    },
+    {
+      "call_id": "gong-020",
+      "transcript_excerpt": "Prospect: We've narrowed to you and Salesforce's new Competitive Intelligence add-on. What's your differentiator?\nRep: Salesforce CI is built around CRM data — win/loss from your own pipeline. Ours spans four layers: earned media from 270K sources, AI perception via GenAI Lens, Gong transcript intelligence, and Owler firmographics. Their product tells you about deals you've already run. Ours tells you what's happening in the market today, including how AI models describe your competitors right now.\nProspect: The AI perception piece keeps coming up. Are all your competitors offering that?\nRep: No. GenAI Lens is a Meltwater-proprietary capability. Klue and Crayon don't have it. Salesforce doesn't have it. It's the reason most of our enterprise wins in Q1 were competitive displacements from CI-only tools.\nProspect: That's a strong differentiator. Let's move to commercial.",
+      "objections": [
+        {
+          "objection": "Salesforce has a new CI add-on.",
+          "category": "competitor_new_product",
+          "suggested_talk_track": "Acknowledge, then reframe scope: Salesforce CI is pipeline-centric. Meltwater's is market-centric. Emphasize the four-layer data moat — especially GenAI Lens as unique IP. Ask if their team tracks AI search visibility today."
+        }
+      ],
+      "win_signals": ["GenAI Lens mentioned unprompted", "Moved to commercial", "Closed won"]
+    }
+  ]
+}

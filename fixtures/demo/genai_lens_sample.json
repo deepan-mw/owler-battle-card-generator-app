@@ -1,0 +1,534 @@
+{
+  "companies": [
+    {
+      "request": {
+        "domain": "salesforce.com"
+      },
+      "genai_lens_brandAnalysis": {
+        "company": "Salesforce",
+        "domain": "salesforce.com",
+        "analysis_date": "2026-05-30",
+        "overall_visibility_score": 88,
+        "brand_sentiment_in_ai": "positive",
+        "models_analyzed": [
+          "gpt-4o",
+          "gemini-1.5-pro",
+          "claude-3-5-sonnet",
+          "llama-3-70b"
+        ],
+        "brand_description_consensus": "Salesforce is consistently described by AI models as the market-leading enterprise CRM platform, known for its cloud-first architecture, extensive ecosystem (AppExchange), and AI capabilities via Einstein. Models frequently associate Salesforce with enterprise-grade scalability but also complexity and high cost.",
+        "key_associations": [
+          {
+            "term": "market leader",
+            "frequency": 0.94
+          },
+          {
+            "term": "enterprise CRM",
+            "frequency": 0.91
+          },
+          {
+            "term": "complex",
+            "frequency": 0.72
+          },
+          {
+            "term": "expensive",
+            "frequency": 0.68
+          },
+          {
+            "term": "AI-powered",
+            "frequency": 0.61
+          },
+          {
+            "term": "AppExchange ecosystem",
+            "frequency": 0.58
+          }
+        ],
+        "prompt_visibility": {
+          "query": "What is the best CRM for enterprise?",
+          "rank": 1,
+          "mention_rate": 0.97,
+          "sample_response_excerpt": "Salesforce is widely considered the gold standard for enterprise CRM, offering the most comprehensive feature set and largest ecosystem of integrations..."
+        },
+        "competitive_positioning_in_ai": {
+          "vs_hubspot": "Salesforce described as more powerful but harder to use; HubSpot as more user-friendly for SMB",
+          "vs_microsoft": "Salesforce described as more CRM-specialized; Microsoft Dynamics seen as better integrated with M365"
+        }
+      },
+      "genai_lens_entityAspectProfile": {
+        "company": "Salesforce",
+        "aspects": [
+          {
+            "aspect": "Ease of Use",
+            "score": 38,
+            "sentiment": "negative",
+            "representative_phrases": [
+              "steep learning curve",
+              "requires dedicated admin",
+              "complex configuration",
+              "overwhelming for new users"
+            ],
+            "sources_analyzed": 1240
+          },
+          {
+            "aspect": "Pricing",
+            "score": 34,
+            "sentiment": "negative",
+            "representative_phrases": [
+              "expensive licensing",
+              "complex pricing tiers",
+              "add-on costs escalate quickly",
+              "high total cost of ownership"
+            ],
+            "sources_analyzed": 987
+          },
+          {
+            "aspect": "AI Capabilities",
+            "score": 79,
+            "sentiment": "positive",
+            "representative_phrases": [
+              "Einstein AI is market-leading",
+              "Agentforce is a game changer",
+              "strong AI roadmap",
+              "AI-native workflows"
+            ],
+            "sources_analyzed": 856
+          },
+          {
+            "aspect": "Integrations & Ecosystem",
+            "score": 91,
+            "sentiment": "positive",
+            "representative_phrases": [
+              "largest AppExchange marketplace",
+              "integrates with everything",
+              "robust API",
+              "extensive partner network"
+            ],
+            "sources_analyzed": 1102
+          },
+          {
+            "aspect": "Customer Support",
+            "score": 51,
+            "sentiment": "neutral",
+            "representative_phrases": [
+              "support quality varies by tier",
+              "good community forums",
+              "enterprise support is solid",
+              "SMB support can be slow"
+            ],
+            "sources_analyzed": 643
+          },
+          {
+            "aspect": "Scalability",
+            "score": 87,
+            "sentiment": "positive",
+            "representative_phrases": [
+              "scales to enterprise level",
+              "handles millions of records",
+              "multi-org support",
+              "global deployments"
+            ],
+            "sources_analyzed": 734
+          }
+        ]
+      },
+      "genai_lens_promptVisibilityGaps": {
+        "company": "Salesforce",
+        "gaps_identified": [
+          {
+            "prompt_category": "Mid-market CRM",
+            "query": "What is the best CRM for a 200-person company?",
+            "salesforce_mentioned": false,
+            "top_mentioned": [
+              "HubSpot",
+              "Pipedrive",
+              "Zoho"
+            ],
+            "gap_severity": "high",
+            "insight": "Salesforce loses AI-assisted recommendation share in mid-market due to perceived complexity and cost"
+          },
+          {
+            "prompt_category": "AI CRM newcomers",
+            "query": "What are the best AI-native CRM tools in 2026?",
+            "salesforce_mentioned": true,
+            "salesforce_rank": 3,
+            "top_mentioned": [
+              "HubSpot Breeze",
+              "Clay",
+              "Salesforce Agentforce"
+            ],
+            "gap_severity": "medium",
+            "insight": "Despite Agentforce launch, newer AI-native entrants are capturing AI CRM mindshare"
+          }
+        ]
+      }
+    },
+    {
+      "request": {
+        "domain": "hubspot.com"
+      },
+      "genai_lens_brandAnalysis": {
+        "company": "HubSpot",
+        "domain": "hubspot.com",
+        "analysis_date": "2026-05-30",
+        "overall_visibility_score": 76,
+        "brand_sentiment_in_ai": "positive",
+        "models_analyzed": [
+          "gpt-4o",
+          "gemini-1.5-pro",
+          "claude-3-5-sonnet",
+          "llama-3-70b"
+        ],
+        "brand_description_consensus": "HubSpot is consistently described as the friendliest, most accessible CRM for small and mid-sized businesses, particularly valued for its inbound marketing heritage and all-in-one approach. AI models frequently recommend HubSpot as the go-to alternative to Salesforce for companies that prioritize usability over raw power.",
+        "key_associations": [
+          {
+            "term": "easy to use",
+            "frequency": 0.89
+          },
+          {
+            "term": "SMB CRM",
+            "frequency": 0.84
+          },
+          {
+            "term": "inbound marketing",
+            "frequency": 0.79
+          },
+          {
+            "term": "affordable",
+            "frequency": 0.71
+          },
+          {
+            "term": "all-in-one",
+            "frequency": 0.66
+          },
+          {
+            "term": "Salesforce alternative",
+            "frequency": 0.61
+          }
+        ],
+        "prompt_visibility": {
+          "query": "What is the best CRM for a growing startup?",
+          "rank": 1,
+          "mention_rate": 0.88,
+          "sample_response_excerpt": "HubSpot is often the top recommendation for growing startups due to its free tier, ease of use, and seamless expansion from marketing to sales to service..."
+        },
+        "competitive_positioning_in_ai": {
+          "vs_salesforce": "HubSpot described as easier and more affordable; Salesforce as more powerful for enterprise",
+          "vs_zoho": "HubSpot described as better UX and ecosystem; Zoho as cheaper for budget-constrained teams"
+        }
+      },
+      "genai_lens_entityAspectProfile": {
+        "company": "HubSpot",
+        "aspects": [
+          {
+            "aspect": "Ease of Use",
+            "score": 86,
+            "sentiment": "positive",
+            "representative_phrases": [
+              "intuitive interface",
+              "quick onboarding",
+              "no dedicated admin needed",
+              "drag-and-drop simplicity"
+            ],
+            "sources_analyzed": 1089
+          },
+          {
+            "aspect": "Pricing",
+            "score": 58,
+            "sentiment": "neutral",
+            "representative_phrases": [
+              "free tier is generous",
+              "costs escalate at enterprise scale",
+              "good value for SMB",
+              "enterprise pricing comparable to Salesforce"
+            ],
+            "sources_analyzed": 876
+          },
+          {
+            "aspect": "AI Capabilities",
+            "score": 67,
+            "sentiment": "positive",
+            "representative_phrases": [
+              "Breeze AI simplifies workflows",
+              "AI content generation is solid",
+              "AI assistant well-integrated",
+              "catching up to Salesforce on AI depth"
+            ],
+            "sources_analyzed": 612
+          },
+          {
+            "aspect": "Integrations & Ecosystem",
+            "score": 72,
+            "sentiment": "positive",
+            "representative_phrases": [
+              "good marketplace of integrations",
+              "native integrations well-maintained",
+              "smaller than Salesforce AppExchange",
+              "key tools all supported"
+            ],
+            "sources_analyzed": 798
+          },
+          {
+            "aspect": "Enterprise Scalability",
+            "score": 48,
+            "sentiment": "neutral",
+            "representative_phrases": [
+              "struggles at 1000+ seat deployments",
+              "data limits can be a concern",
+              "fine for mid-market, challenging at enterprise",
+              "customization limited vs Salesforce"
+            ],
+            "sources_analyzed": 543
+          }
+        ]
+      },
+      "genai_lens_promptVisibilityGaps": {
+        "company": "HubSpot",
+        "gaps_identified": [
+          {
+            "prompt_category": "Enterprise CRM",
+            "query": "What CRM should a 5000-person company use?",
+            "hubspot_mentioned": false,
+            "top_mentioned": [
+              "Salesforce",
+              "Microsoft Dynamics",
+              "SAP"
+            ],
+            "gap_severity": "high",
+            "insight": "HubSpot is rarely recommended by AI models for large enterprise use cases \u2014 significant gap in enterprise mindshare"
+          },
+          {
+            "prompt_category": "Marketing automation",
+            "query": "What is the best marketing automation tool in 2026?",
+            "hubspot_mentioned": true,
+            "hubspot_rank": 2,
+            "top_mentioned": [
+              "Marketo",
+              "HubSpot Marketing Hub",
+              "Braze"
+            ],
+            "gap_severity": "low",
+            "insight": "Strong positioning in marketing automation, but Marketo holds #1 spot for enterprise marketing"
+          }
+        ]
+      }
+    },
+    {
+      "request": {
+        "domain": "microsoft.com"
+      },
+      "genai_lens_brandAnalysis": {
+        "company": "Microsoft",
+        "domain": "microsoft.com",
+        "analysis_date": "2026-05-30",
+        "overall_visibility_score": 94,
+        "brand_sentiment_in_ai": "positive",
+        "models_analyzed": [
+          "gpt-4o",
+          "gemini-1.5-pro",
+          "claude-3-5-sonnet",
+          "llama-3-70b"
+        ],
+        "brand_description_consensus": "Microsoft is described by AI models as a dominant enterprise platform whose CRM/ERP play (Dynamics 365) and Copilot AI are deeply integrated with Microsoft 365 and Azure. Models frequently position Microsoft as the most AI-forward incumbent, while noting licensing and product breadth can overwhelm buyers.",
+        "key_associations": [
+          {
+            "term": "AI leader",
+            "frequency": 0.92
+          },
+          {
+            "term": "deeply integrated",
+            "frequency": 0.88
+          },
+          {
+            "term": "enterprise platform",
+            "frequency": 0.85
+          },
+          {
+            "term": "Copilot",
+            "frequency": 0.81
+          },
+          {
+            "term": "complex licensing",
+            "frequency": 0.64
+          },
+          {
+            "term": "bundled",
+            "frequency": 0.59
+          }
+        ],
+        "prompt_visibility": {
+          "query": "What is the best AI-integrated business platform for enterprise?",
+          "rank": 1,
+          "mention_rate": 0.95,
+          "sample_response_excerpt": "Microsoft is frequently cited first for AI-integrated enterprise software, with Copilot embedded across Dynamics 365, M365, and Azure..."
+        },
+        "competitive_positioning_in_ai": {
+          "vs_salesforce": "Microsoft described as better integrated with productivity stack and more aggressively priced; Salesforce as more CRM-specialized",
+          "vs_google": "Microsoft seen as stronger in enterprise/AI integration; Google as stronger in search/data"
+        }
+      },
+      "genai_lens_entityAspectProfile": {
+        "company": "Microsoft",
+        "aspects": [
+          {
+            "aspect": "Integrations & Ecosystem",
+            "score": 93,
+            "sentiment": "positive",
+            "representative_phrases": [
+              "native M365 integration",
+              "one vendor for everything",
+              "Azure-backed"
+            ],
+            "sources_analyzed": 1510
+          },
+          {
+            "aspect": "AI Capabilities",
+            "score": 90,
+            "sentiment": "positive",
+            "representative_phrases": [
+              "Copilot everywhere",
+              "OpenAI-powered",
+              "autonomous agents"
+            ],
+            "sources_analyzed": 1602
+          },
+          {
+            "aspect": "Scalability",
+            "score": 88,
+            "sentiment": "positive",
+            "representative_phrases": [
+              "enterprise-grade",
+              "global scale"
+            ],
+            "sources_analyzed": 980
+          },
+          {
+            "aspect": "Licensing Complexity",
+            "score": 36,
+            "sentiment": "negative",
+            "representative_phrases": [
+              "confusing SKUs",
+              "hard to predict cost",
+              "bundling lock-in"
+            ],
+            "sources_analyzed": 1120
+          },
+          {
+            "aspect": "Ease of Use",
+            "score": 49,
+            "sentiment": "neutral",
+            "representative_phrases": [
+              "powerful but broad",
+              "learning curve across apps"
+            ],
+            "sources_analyzed": 860
+          }
+        ]
+      },
+      "genai_lens_promptVisibilityGaps": {
+        "company": "Microsoft",
+        "gaps": []
+      }
+    },
+    {
+      "request": {
+        "domain": "klue.com"
+      },
+      "genai_lens_brandAnalysis": {
+        "company": "Klue",
+        "domain": "klue.com",
+        "analysis_date": "2026-05-29",
+        "overall_visibility_score": 51,
+        "brand_sentiment_in_ai": "positive",
+        "models_analyzed": [
+          "gpt-4o",
+          "gemini-1.5-pro",
+          "claude-3-5-sonnet",
+          "llama-3-70b"
+        ],
+        "brand_description_consensus": "Klue is described by AI models as a leading competitive enablement platform, valued for battlecards and competitor tracking that plug into CRM and sales workflows. Models note strong product depth in its niche but lower general brand awareness than horizontal SaaS vendors.",
+        "key_associations": [
+          {
+            "term": "competitive intelligence",
+            "frequency": 0.83
+          },
+          {
+            "term": "battlecards",
+            "frequency": 0.78
+          },
+          {
+            "term": "sales enablement",
+            "frequency": 0.69
+          },
+          {
+            "term": "niche",
+            "frequency": 0.55
+          },
+          {
+            "term": "Crayon alternative",
+            "frequency": 0.52
+          }
+        ],
+        "prompt_visibility": {
+          "query": "What is the best competitive intelligence platform?",
+          "rank": 1,
+          "mention_rate": 0.62,
+          "sample_response_excerpt": "Klue and Crayon are the two most cited competitive enablement platforms, with Klue praised for battlecard delivery inside the sales workflow..."
+        },
+        "competitive_positioning_in_ai": {
+          "vs_crayon": "Klue described as stronger on battlecard delivery and CRM integration; Crayon as stronger on market/news monitoring",
+          "vs_meltwater": "Klue seen as purpose-built for compete; Meltwater as broader media/PR intelligence"
+        }
+      },
+      "genai_lens_entityAspectProfile": {
+        "company": "Klue",
+        "aspects": [
+          {
+            "aspect": "Competitive Intelligence",
+            "score": 84,
+            "sentiment": "positive",
+            "representative_phrases": [
+              "best-in-class battlecards",
+              "strong competitor tracking"
+            ],
+            "sources_analyzed": 420
+          },
+          {
+            "aspect": "CRM Integration",
+            "score": 76,
+            "sentiment": "positive",
+            "representative_phrases": [
+              "Salesforce-native",
+              "delivers in the flow of work"
+            ],
+            "sources_analyzed": 310
+          },
+          {
+            "aspect": "Market Awareness",
+            "score": 38,
+            "sentiment": "negative",
+            "representative_phrases": [
+              "lesser-known brand",
+              "niche category",
+              "limited public footprint"
+            ],
+            "sources_analyzed": 260
+          },
+          {
+            "aspect": "Pricing",
+            "score": 47,
+            "sentiment": "neutral",
+            "representative_phrases": [
+              "enterprise pricing",
+              "no public tiers"
+            ],
+            "sources_analyzed": 190
+          }
+        ]
+      },
+      "genai_lens_promptVisibilityGaps": {
+        "company": "Klue",
+        "gaps": []
+      }
+    }
+  ]
+}

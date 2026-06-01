@@ -1,0 +1,4 @@
+fastapi
+uvicorn
+jsonschema
+anthropic  # optional: enables the real LLM transport when ANTHROPIC_API_KEY is set

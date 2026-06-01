@@ -1,0 +1,192 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://owler.meltwater.com/schemas/battlecard.schema.json",
+  "title": "Competitive Battlecard",
+  "description": "Unified output schema for an Owler competitive battlecard synthesized from Owler, Meltwater media, GenAI Lens, and Gong. Every synthesized claim carries source attribution and a confidence score so the UI can show provenance and gate low-confidence content.",
+  "type": "object",
+  "required": ["meta", "company_overview", "sections"],
+  "additionalProperties": false,
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["company_domain", "company_name", "generated_at", "schema_version"],
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": { "type": "string", "const": "1.0.0" },
+        "battlecard_id": { "type": "string", "description": "Stable id, e.g. domain + date" },
+        "company_domain": { "type": "string", "format": "hostname" },
+        "company_name": { "type": "string" },
+        "vs_company": {
+          "type": "string",
+          "description": "The 'us' company the battlecard positions against (e.g. Meltwater/Owler customer)."
+        },
+        "generated_at": { "type": "string", "format": "date-time" },
+        "cache_ttl_seconds": { "type": "integer", "default": 86400 },
+        "data_sources_used": {
+          "type": "array",
+          "items": { "enum": ["owler", "media", "genai_lens", "gong"] },
+          "uniqueItems": true
+        },
+        "overall_confidence": { "$ref": "#/$defs/confidence" }
+      }
+    },
+
+    "company_overview": {
+      "type": "object",
+      "description": "Primary source: Owler.",
+      "required": ["description"],
+      "additionalProperties": false,
+      "properties": {
+        "description": { "type": "string", "description": "One-line company description." },
+        "revenue": { "type": ["string", "null"], "description": "e.g. '$31B'" },
+        "headcount": { "type": ["integer", "null"] },
+        "hq": { "type": ["string", "null"] },
+        "founded": { "type": ["integer", "null"] },
+        "ceo": { "type": ["string", "null"] },
+        "funding_total": { "type": ["string", "null"] },
+        "top_competitors": { "type": "array", "items": { "type": "string" } },
+        "attribution": { "$ref": "#/$defs/attribution" }
+      }
+    },
+
+    "sections": {
+      "type": "object",
+      "description": "The five synthesized battlecard sections beyond the overview.",
+      "required": ["strengths", "weaknesses", "objections", "ai_perception", "news_feed"],
+      "additionalProperties": false,
+      "properties": {
+        "strengths": {
+          "$ref": "#/$defs/claim_section",
+          "description": "Source: Media + GenAI Lens aspects."
+        },
+        "weaknesses": {
+          "$ref": "#/$defs/claim_section",
+          "description": "Source: GenAI Lens + Media sentiment."
+        },
+        "objections": {
+          "type": "object",
+          "description": "Source: Gong transcripts. Top objections with AI-generated counter talk tracks.",
+          "required": ["items", "section_confidence"],
+          "additionalProperties": false,
+          "properties": {
+            "section_confidence": { "$ref": "#/$defs/confidence" },
+            "items": {
+              "type": "array",
+              "maxItems": 5,
+              "items": {
+                "type": "object",
+                "required": ["objection", "talk_track", "confidence"],
+                "additionalProperties": false,
+                "properties": {
+                  "objection": { "type": "string" },
+                  "talk_track": { "type": "string", "description": "Suggested counter-argument." },
+                  "frequency": { "type": ["integer", "null"], "description": "Times seen in Gong calls." },
+                  "confidence": { "$ref": "#/$defs/confidence" },
+                  "attribution": { "$ref": "#/$defs/attribution" }
+                }
+              }
+            }
+          }
+        },
+        "ai_perception": {
+          "type": "object",
+          "description": "Source: GenAI Lens brand analysis. How LLMs describe this competitor vs. us.",
+          "required": ["summary", "section_confidence"],
+          "additionalProperties": false,
+          "properties": {
+            "summary": { "type": "string" },
+            "section_confidence": { "$ref": "#/$defs/confidence" },
+            "visibility_score": { "type": ["number", "null"], "minimum": 0, "maximum": 100 },
+            "vs_visibility_score": { "type": ["number", "null"], "minimum": 0, "maximum": 100 },
+            "model_breakdown": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["model", "characterization"],
+                "additionalProperties": false,
+                "properties": {
+                  "model": { "enum": ["chatgpt", "gemini", "claude", "perplexity", "other"] },
+                  "characterization": { "type": "string" },
+                  "rank_for_category": { "type": ["integer", "null"] }
+                }
+              }
+            },
+            "attribution": { "$ref": "#/$defs/attribution" }
+          }
+        },
+        "news_feed": {
+          "type": "object",
+          "description": "Source: Meltwater media search. Last 7 days, auto-tagged.",
+          "required": ["items", "section_confidence"],
+          "additionalProperties": false,
+          "properties": {
+            "section_confidence": { "$ref": "#/$defs/confidence" },
+            "sentiment_summary": { "enum": ["positive", "neutral", "negative", "mixed", null] },
+            "volume_trend": { "enum": ["up", "down", "flat", null] },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["headline", "url", "published_at"],
+                "additionalProperties": false,
+                "properties": {
+                  "headline": { "type": "string" },
+                  "url": { "type": "string", "format": "uri" },
+                  "source": { "type": ["string", "null"] },
+                  "published_at": { "type": "string", "format": "date-time" },
+                  "topic_tag": { "type": ["string", "null"] },
+                  "sentiment": { "enum": ["positive", "neutral", "negative", null] }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "$defs": {
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "0-1. UI quality gate: reject/regenerate sections below threshold (e.g. 0.5)."
+    },
+    "attribution": {
+      "type": "array",
+      "description": "Provenance for claims in this block.",
+      "items": {
+        "type": "object",
+        "required": ["source"],
+        "additionalProperties": false,
+        "properties": {
+          "source": { "enum": ["owler", "media", "genai_lens", "gong"] },
+          "ref": { "type": "string", "description": "Article URL, call id, or API record id." },
+          "label": { "type": "string", "description": "Human-readable, e.g. '200 news articles'." }
+        }
+      }
+    },
+    "claim_section": {
+      "type": "object",
+      "required": ["items", "section_confidence"],
+      "additionalProperties": false,
+      "properties": {
+        "section_confidence": { "$ref": "#/$defs/confidence" },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["claim", "confidence"],
+            "additionalProperties": false,
+            "properties": {
+              "claim": { "type": "string" },
+              "evidence": { "type": ["string", "null"], "description": "Supporting detail/quote." },
+              "confidence": { "$ref": "#/$defs/confidence" },
+              "attribution": { "$ref": "#/$defs/attribution" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

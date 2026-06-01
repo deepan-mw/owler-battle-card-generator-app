@@ -1,0 +1,92 @@
+{
+  "meta": {
+    "schema_version": "1.0.0",
+    "battlecard_id": "salesforce.com-2026-05-30",
+    "company_domain": "salesforce.com",
+    "company_name": "Salesforce",
+    "vs_company": "HubSpot",
+    "generated_at": "2026-05-30T09:00:00Z",
+    "cache_ttl_seconds": 86400,
+    "data_sources_used": ["owler", "media", "genai_lens", "gong"],
+    "overall_confidence": 0.82
+  },
+  "company_overview": {
+    "description": "Cloud-based CRM and enterprise application platform.",
+    "revenue": "$31B",
+    "headcount": 73000,
+    "hq": "San Francisco, CA",
+    "founded": 1999,
+    "ceo": "Marc Benioff",
+    "funding_total": "$65.4M (pre-IPO)",
+    "top_competitors": ["HubSpot", "Microsoft Dynamics", "Oracle", "Zoho"],
+    "attribution": [{ "source": "owler", "label": "Owler company graph" }]
+  },
+  "sections": {
+    "strengths": {
+      "section_confidence": 0.85,
+      "items": [
+        {
+          "claim": "Dominant enterprise CRM market share and deep ecosystem.",
+          "evidence": "Consistently described as category leader across 200+ recent articles.",
+          "confidence": 0.9,
+          "attribution": [
+            { "source": "media", "label": "200 news articles" },
+            { "source": "genai_lens", "label": "aspect: market position" }
+          ]
+        }
+      ]
+    },
+    "weaknesses": {
+      "section_confidence": 0.74,
+      "items": [
+        {
+          "claim": "Perceived as complex and expensive for smaller teams.",
+          "evidence": "Negative sentiment cluster around 'implementation cost' and 'complexity'.",
+          "confidence": 0.78,
+          "attribution": [
+            { "source": "genai_lens", "label": "aspect: ease of use" },
+            { "source": "media", "label": "sentiment themes" }
+          ]
+        }
+      ]
+    },
+    "objections": {
+      "section_confidence": 0.8,
+      "items": [
+        {
+          "objection": "Their platform is too complex for our team size.",
+          "talk_track": "Position our faster time-to-value and lower admin overhead; offer a guided onboarding comparison.",
+          "frequency": 14,
+          "confidence": 0.83,
+          "attribution": [{ "source": "gong", "ref": "call_8842", "label": "14 sales calls" }]
+        }
+      ]
+    },
+    "ai_perception": {
+      "summary": "ChatGPT and Claude rank Salesforce #1 for 'best enterprise CRM' but cite cost; we appear #3 with stronger ease-of-use framing.",
+      "section_confidence": 0.79,
+      "visibility_score": 91,
+      "vs_visibility_score": 58,
+      "model_breakdown": [
+        { "model": "chatgpt", "characterization": "Market leader, enterprise-grade, costly.", "rank_for_category": 1 },
+        { "model": "claude", "characterization": "Comprehensive but steep learning curve.", "rank_for_category": 1 }
+      ],
+      "attribution": [{ "source": "genai_lens", "label": "brand analysis" }]
+    },
+    "news_feed": {
+      "section_confidence": 0.88,
+      "sentiment_summary": "mixed",
+      "volume_trend": "up",
+      "items": [
+        {
+          "headline": "Salesforce announces new AI agent platform",
+          "url": "https://example.com/sf-ai-agent",
+          "source": "TechCrunch",
+          "published_at": "2026-05-28T14:00:00Z",
+          "topic_tag": "product",
+          "sentiment": "positive"
+        }
+      ]
+    }
+  }
+}

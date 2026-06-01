@@ -1,0 +1,386 @@
+{
+  "companies": [
+    {
+      "request": {
+        "domain": "salesforce.com"
+      },
+      "owler_company_details": {
+        "id": "owler-sf-001",
+        "name": "Salesforce",
+        "domain": "salesforce.com",
+        "description": "Salesforce is the world's #1 CRM platform, enabling companies to connect with customers in a whole new way.",
+        "founded_year": 1999,
+        "headquarters": {
+          "city": "San Francisco",
+          "state": "California",
+          "country": "USA"
+        },
+        "employee_count": 72682,
+        "employee_range": "50001-100000",
+        "revenue_usd": 34857000000,
+        "revenue_range": "$10B+",
+        "funding": {
+          "total_raised_usd": 65400000,
+          "last_funding_type": "IPO",
+          "last_funding_date": "2004-06-23"
+        },
+        "stock": {
+          "exchange": "NYSE",
+          "ticker": "CRM",
+          "market_cap_usd": 213000000000
+        },
+        "executives": [
+          {
+            "name": "Marc Benioff",
+            "title": "Chairman & CEO"
+          },
+          {
+            "name": "Amy Weaver",
+            "title": "President & CFO"
+          },
+          {
+            "name": "Brian Millham",
+            "title": "President & COO"
+          }
+        ],
+        "industries": [
+          "CRM",
+          "Cloud Computing",
+          "SaaS",
+          "Enterprise Software"
+        ],
+        "competitors": [
+          "hubspot.com",
+          "microsoft.com",
+          "oracle.com",
+          "sap.com"
+        ],
+        "subsidiaries": [
+          "tableau.com",
+          "slack.com",
+          "mulesoft.com"
+        ],
+        "products": [
+          "Sales Cloud",
+          "Service Cloud",
+          "Marketing Cloud",
+          "Tableau",
+          "Slack",
+          "Einstein AI",
+          "Agentforce"
+        ],
+        "owler_score": 92,
+        "last_updated": "2026-05-30T12:00:00Z"
+      },
+      "mira_get_company_intelligence": {
+        "company": "Salesforce",
+        "domain": "salesforce.com",
+        "intelligence_summary": "Salesforce maintains dominant CRM market share (~22%) but faces increasing headwinds from Microsoft Dynamics integration with M365 and a more price-sensitive SMB market. Agentforce AI platform launch positions them strongly in AI-native CRM.",
+        "recent_signals": [
+          {
+            "type": "product_launch",
+            "date": "2026-04-15",
+            "description": "Agentforce 2.0 launched with autonomous AI agents for sales and service",
+            "significance": "high"
+          },
+          {
+            "type": "financial",
+            "date": "2026-03-01",
+            "description": "Q4 FY26 revenue $9.8B, beating estimates by 2.1%; raised FY27 guidance",
+            "significance": "high"
+          },
+          {
+            "type": "partnership",
+            "date": "2026-02-10",
+            "description": "Deepened AWS partnership for joint go-to-market on Einstein + Bedrock",
+            "significance": "medium"
+          },
+          {
+            "type": "talent",
+            "date": "2026-01-20",
+            "description": "Hired 400+ AI engineers; closed AI research lab in London",
+            "significance": "medium"
+          }
+        ],
+        "market_position": "Leader",
+        "growth_trajectory": "stable"
+      }
+    },
+    {
+      "request": {
+        "domain": "hubspot.com"
+      },
+      "owler_company_details": {
+        "id": "owler-hs-002",
+        "name": "HubSpot",
+        "domain": "hubspot.com",
+        "description": "HubSpot is a CRM platform with all the software, integrations, and resources needed to connect marketing, sales, content management, and customer service.",
+        "founded_year": 2006,
+        "headquarters": {
+          "city": "Cambridge",
+          "state": "Massachusetts",
+          "country": "USA"
+        },
+        "employee_count": 7866,
+        "employee_range": "5001-10000",
+        "revenue_usd": 2628000000,
+        "revenue_range": "$1B-$5B",
+        "funding": {
+          "total_raised_usd": 100500000,
+          "last_funding_type": "IPO",
+          "last_funding_date": "2014-10-09"
+        },
+        "stock": {
+          "exchange": "NYSE",
+          "ticker": "HUBS",
+          "market_cap_usd": 24100000000
+        },
+        "executives": [
+          {
+            "name": "Yamini Rangan",
+            "title": "CEO"
+          },
+          {
+            "name": "Kate Bueker",
+            "title": "CFO"
+          },
+          {
+            "name": "Dharmesh Shah",
+            "title": "Co-Founder & CTO"
+          }
+        ],
+        "industries": [
+          "CRM",
+          "Inbound Marketing",
+          "SaaS",
+          "Marketing Automation"
+        ],
+        "competitors": [
+          "salesforce.com",
+          "marketo.com",
+          "mailchimp.com",
+          "pipedrive.com"
+        ],
+        "subsidiaries": [
+          "clearbit.com"
+        ],
+        "products": [
+          "Marketing Hub",
+          "Sales Hub",
+          "Service Hub",
+          "Content Hub",
+          "Operations Hub",
+          "Breeze AI"
+        ],
+        "owler_score": 84,
+        "last_updated": "2026-05-30T12:00:00Z"
+      },
+      "mira_get_company_intelligence": {
+        "company": "HubSpot",
+        "domain": "hubspot.com",
+        "intelligence_summary": "HubSpot is the dominant CRM for SMB and mid-market, but faces margin pressure from Breeze AI development costs and renewed Salesforce push into mid-market with discounted bundles. Strong brand affinity in EMEA where Meltwater has significant presence.",
+        "recent_signals": [
+          {
+            "type": "product_launch",
+            "date": "2026-05-01",
+            "description": "Breeze AI Copilot GA launch \u2014 AI assistant embedded across all Hubs",
+            "significance": "high"
+          },
+          {
+            "type": "financial",
+            "date": "2026-04-02",
+            "description": "Q1 FY26 revenue $686M, +16% YoY; operating margin improvement to 14%",
+            "significance": "medium"
+          },
+          {
+            "type": "partnership",
+            "date": "2026-03-15",
+            "description": "New LinkedIn Sales Navigator deep integration for Sales Hub",
+            "significance": "medium"
+          },
+          {
+            "type": "expansion",
+            "date": "2026-02-01",
+            "description": "Opened new EMEA HQ in Dublin; added 300 headcount in region",
+            "significance": "medium"
+          }
+        ],
+        "market_position": "Challenger",
+        "growth_trajectory": "growing"
+      }
+    },
+    {
+      "request": {
+        "domain": "microsoft.com"
+      },
+      "owler_company_details": {
+        "id": "owler-msft-001",
+        "name": "Microsoft",
+        "domain": "microsoft.com",
+        "description": "Microsoft competes in CRM/ERP through Dynamics 365 and AI via Copilot, deeply integrated with Microsoft 365 and Azure.",
+        "founded_year": 1975,
+        "headquarters": {
+          "city": "Redmond",
+          "state": "Washington",
+          "country": "USA"
+        },
+        "employee_count": 228000,
+        "employee_range": "100001+",
+        "revenue_usd": 245100000000,
+        "revenue_range": "$10B+",
+        "funding": {
+          "total_raised_usd": 1000000,
+          "last_funding_type": "IPO",
+          "last_funding_date": "1986-03-13"
+        },
+        "stock": {
+          "exchange": "NASDAQ",
+          "ticker": "MSFT",
+          "market_cap_usd": 3120000000000
+        },
+        "executives": [
+          {
+            "name": "Satya Nadella",
+            "title": "Chairman & CEO"
+          },
+          {
+            "name": "Amy Hood",
+            "title": "EVP & CFO"
+          },
+          {
+            "name": "Judson Althoff",
+            "title": "Chief Commercial Officer"
+          }
+        ],
+        "industries": [
+          "Cloud Computing",
+          "Enterprise Software",
+          "CRM",
+          "Productivity"
+        ],
+        "competitors": [
+          "salesforce.com",
+          "oracle.com",
+          "sap.com",
+          "google.com"
+        ],
+        "subsidiaries": [
+          "linkedin.com",
+          "github.com"
+        ],
+        "products": [
+          "Dynamics 365",
+          "Microsoft 365 Copilot",
+          "Power Platform",
+          "Azure",
+          "Teams"
+        ],
+        "owler_score": 95,
+        "last_updated": "2026-05-30T12:00:00Z"
+      },
+      "mira_get_company_intelligence": {
+        "company": "Microsoft",
+        "domain": "microsoft.com",
+        "intelligence_summary": "Microsoft is pressuring Salesforce by bundling Dynamics 365 + Copilot with the M365 stack at aggressive price points. Copilot adoption is the central AI narrative; licensing complexity remains the most common buyer friction.",
+        "recent_signals": [
+          {
+            "type": "product_launch",
+            "date": "2026-04-22",
+            "description": "Dynamics 365 Copilot autonomous agents expanded to sales and field service",
+            "significance": "high"
+          },
+          {
+            "type": "financial",
+            "date": "2026-04-25",
+            "description": "Q3 FY26 cloud revenue up 21% YoY; Dynamics +18%",
+            "significance": "high"
+          },
+          {
+            "type": "partnership",
+            "date": "2026-02-18",
+            "description": "Expanded OpenAI integration across Copilot surfaces",
+            "significance": "medium"
+          }
+        ]
+      }
+    },
+    {
+      "request": {
+        "domain": "klue.com"
+      },
+      "owler_company_details": {
+        "id": "owler-klue-001",
+        "name": "Klue",
+        "domain": "klue.com",
+        "description": "Klue is a competitive enablement platform that helps revenue teams collect, curate, and deliver competitive intelligence and battlecards.",
+        "founded_year": 2015,
+        "headquarters": {
+          "city": "Vancouver",
+          "state": "British Columbia",
+          "country": "Canada"
+        },
+        "employee_count": 250,
+        "employee_range": "201-500",
+        "revenue_usd": 40000000,
+        "revenue_range": "$10M-$50M",
+        "funding": {
+          "total_raised_usd": 77000000,
+          "last_funding_type": "Series B",
+          "last_funding_date": "2021-09-14"
+        },
+        "stock": {
+          "exchange": null,
+          "ticker": null,
+          "market_cap_usd": null
+        },
+        "executives": [
+          {
+            "name": "Jason Smith",
+            "title": "Co-Founder & CEO"
+          },
+          {
+            "name": "Sarathy Naicker",
+            "title": "Co-Founder & CTO"
+          }
+        ],
+        "industries": [
+          "Competitive Enablement",
+          "Sales Enablement",
+          "SaaS"
+        ],
+        "competitors": [
+          "crayon.co",
+          "meltwater.com"
+        ],
+        "subsidiaries": [],
+        "products": [
+          "Klue Platform",
+          "Battlecards",
+          "Win-Loss Analysis",
+          "Consumer (Reviews)"
+        ],
+        "owler_score": 71,
+        "last_updated": "2026-05-29T12:00:00Z"
+      },
+      "mira_get_company_intelligence": {
+        "company": "Klue",
+        "domain": "klue.com",
+        "intelligence_summary": "Klue leads the competitive-enablement niche alongside Crayon. Strong battlecard product and Salesforce integration; constrained by category awareness and a private-company data footprint.",
+        "recent_signals": [
+          {
+            "type": "product_launch",
+            "date": "2026-03-30",
+            "description": "Klue AI 'Compete Agent' for auto-drafted battlecards",
+            "significance": "high"
+          },
+          {
+            "type": "talent",
+            "date": "2026-02-05",
+            "description": "Hired VP of AI from a larger SaaS vendor",
+            "significance": "low"
+          }
+        ]
+      }
+    }
+  ]
+}

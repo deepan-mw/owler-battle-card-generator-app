@@ -1,0 +1,30 @@
+{
+  "_note": "REPRESENTATIVE shape of a Gong curated-transcript bundle, for mapper testing only. NOT live data. Contains synthetic PII to verify anonymization.",
+  "calls": [
+    {
+      "id": "call_8842",
+      "participants": [
+        { "name": "Jordan Lee", "role": "rep" },
+        { "name": "Priya Nair", "role": "customer" }
+      ],
+      "transcript": [
+        { "speaker": "Jordan Lee", "speaker_role": "rep", "text": "Thanks for the time today. Email me at jordan.lee@vendor.com or call 415-555-0192." },
+        { "speaker": "Priya Nair", "speaker_role": "customer", "text": "Honestly the pricing feels too expensive for a team our size, the budget just isn't there." },
+        { "speaker": "Priya Nair", "speaker_role": "customer", "text": "And the platform looks pretty complex — I worry about the steep learning curve for my reps." },
+        { "speaker": "Priya Nair", "speaker_role": "customer", "text": "Also, how does integration with our existing stack and API work?" }
+      ]
+    },
+    {
+      "id": "call_9001",
+      "participants": [
+        { "name": "Sam Ortiz", "role": "rep" },
+        { "name": "Wei Zhang", "role": "customer" }
+      ],
+      "transcript": [
+        { "speaker": "Wei Zhang", "speaker_role": "customer", "text": "We are concerned about the cost, it's hard to justify the ROI to our stakeholders." },
+        { "speaker": "Wei Zhang", "speaker_role": "customer", "text": "The multi-year contract and lock-in is a real commitment for us." },
+        { "speaker": "Sam Ortiz", "speaker_role": "rep", "text": "Totally understand, let me reach out to wei.zhang@acme.io." }
+      ]
+    }
+  ]
+}

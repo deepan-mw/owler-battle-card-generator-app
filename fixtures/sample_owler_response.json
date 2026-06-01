@@ -1,0 +1,20 @@
+{
+  "_note": "REPRESENTATIVE shape of an owler_company_details response, for mapper testing only. NOT live data. Adjust _map_owler key names to the real API once access lands.",
+  "company": {
+    "name": "Salesforce",
+    "domain": "salesforce.com",
+    "shortDescription": "Cloud-based CRM and enterprise application platform.",
+    "estimatedRevenue": "$31B",
+    "employeeCount": 73000,
+    "headquarters": { "city": "San Francisco", "state": "CA" },
+    "foundedYear": 1999,
+    "ceo": "Marc Benioff",
+    "totalFunding": "$65.4M (pre-IPO)",
+    "topCompetitors": [
+      { "name": "HubSpot" },
+      { "name": "Microsoft Dynamics" },
+      { "name": "Oracle" },
+      { "name": "Zoho" }
+    ]
+  }
+}
