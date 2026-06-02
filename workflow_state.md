@@ -281,3 +281,94 @@ two HTTP transports from env creds in live mode, else degrade honestly.
   correct URL (http://localhost:5500/frontend/index.html), tears both down on Ctrl-C.
   Optional port args; warns to set localStorage.bc_api when API port != 8000. Fixes the
   common "localhost:5500/index.html 404" and the "API not running" banner. bash -n clean.
+
+## Plan (2026-06-02c) — Live transports for Owler/GenAI/Gong (env auto-wire) [approved]
+ANALYZE: owler_fn/genai_fn/gong_fn already thread through fetch_all→adapters→_map_*,
+but live mode leaves them None (sources degrade). Mirror the statistics resolver so each
+source goes live independently when its creds are present. Sources are still blocked
+externally (MCPs unprovisioned) — this is the one-export scaffold for when they land.
+1. make_http_source_fn(base_url, token, api_key=None, query_builder=_default_source_query):
+   generic Bearer(+api-key) POST transport; _default_source_query={"domain":domain}
+   (request shape to confirm at provisioning; _map_* already handles response shapes).
+2. _resolve_source_fns(owler,genai,gong): per-source env via _SOURCE_ENV
+   (OWLER_MCP_*, GENAI_LENS_MCP_*, GONG_API_*); explicit override wins; url+token req'd.
+3. Wire into generate_battlecard live branch beside _resolve_statistics_fns.
+4. Tests: no-creds→all None; per-source independence (only owler set→only owler built,
+   partial creds stay None); explicit override preserved.
+
+## Log
+- 2026-06-02: CONSTRUCT done for Plan 2026-06-02c. Added make_http_source_fn +
+  _default_source_query + _SOURCE_ENV + _resolve_source_fns to aggregator.py; wired into
+  generate_battlecard live branch (owler/genai/gong now auto-resolve from env). Added 3
+  tests. VALIDATE: full suite 29/29 pass; test_live_mode_unchanged still green (no creds
+  → unchanged). Pending (external): real MCP endpoints/auth + one sample response each to
+  confirm _default_source_query request shape against the live APIs; Gong NER pass before
+  real transcripts. Each source then goes live via its env vars — no further code.
+
+## Log
+- 2026-06-02: LIVE statistics shape confirmed + mapper fixed. Called the connected
+  Meltwater statistics MCP (unified_retrieval_statistics_retrieval_tool) for Salesforce
+  — volume-by-week and sentiment breakdown. REAL envelope differs from the earlier guess:
+  resources[].resource.buckets[platform].aggregations[].buckets[] with leaf
+  {key, values.count}, series split per platform. Saved both as fixtures
+  (fixtures/live_stats_{volume,sentiment}_salesforce.com.json). Added _collect_agg_buckets
+  (walks the envelope, sums by key across platforms, sorts by key) and wired it as a
+  fallback in _map_statistics after the existing _find_buckets heuristic (sample fixtures
+  still parse). Verified: volume_trend="up", sentiment="positive" on real data. Added
+  test_map_statistics_real_meltwater_shape. Suite 30/30. NOTE: app runtime still can't
+  call session MCP tools and the Azure APIM endpoint isn't reachable from the sandbox; a
+  real in-app live call needs the production JWT + an MCP-framed (JSON-RPC tools/call)
+  transport — capture above was agent-side to confirm shape. Added .env.example (creds
+  template; .env gitignored).
+
+## Log
+- 2026-06-02: Added MCP-framed transport so the app can hit the real Meltwater MCP
+  endpoint in-app. make_mcp_tool_fn does the JSON-RPC handshake (initialize ->
+  notifications/initialized, capturing Mcp-Session-Id) then tools/call with
+  arg_builder(domain); returns the result `content` ([{type,text}]) so the existing
+  _unwrap_envelope/_map_statistics path handles it unchanged. _parse_mcp_response handles
+  both plain JSON and SSE (data: lines). _resolve_statistics_fns now auto-selects MCP for
+  any "/mcp" URL (tool name MELTWATER_STATS_TOOL, override via MELTWATER_MCP_STATS_TOOL);
+  non-MCP URLs still use make_http_statistics_fn. build_volume_query/build_sentiment_query
+  already match the statistics tool's argument schema (query/platforms/startDate/endDate/
+  limit). Added httpx to requirements.txt. Tests (offline, httpx mocked): MCP request
+  framing + content unwrap through the real pipeline (volume_trend up), SSE/JSON parse,
+  resolver picks MCP for /mcp URL. Suite 33/33. To go live in-app: on a VPN machine,
+  set .env (MELTWATER_MCP_URL/_JWT/_API_KEY), then GET /battlecard?...&mode=live (real
+  JWT still required; sandbox has no outbound network so this runs on the user's box).
+- 2026-06-02: JWT is an OAuth 2.1 access token, not a static value. Endpoints (from user):
+  authorize https://app.meltwater.com/oauth/authorize, token .../oauth/token, register
+  .../oauth/register, revoke .../oauth/revoke; IdP live.gaf-identity-provider.meltwater.io.
+  Added scripts/get_meltwater_token.py (stdlib only): dynamic client registration ->
+  auth-code+PKCE (S256) with resource=MELTWATER_MCP_URL (RFC 8707) -> localhost:8765
+  callback -> token exchange -> writes MELTWATER_MCP_JWT into .env (insert/replace, 0o600,
+  other keys preserved). Offline-tested: PKCE base64url, env write+update idempotent.
+  Runs on a networked/browser machine (sandbox has neither). .env.example documents the
+  flow + that the token expires (re-run on 401). Net: live statistics is now a 3-step
+  user action — cp .env.example .env; python3 scripts/get_meltwater_token.py; run_local.sh.
+- 2026-06-02: BREAKTHROUGH on live auth. Confirmed via curl that the Meltwater MCP
+  endpoint authenticates on the api-key (APIM subscription key) ALONE — POST initialize
+  with only `api-key` + Accept: application/json,text/event-stream returns 200 + valid
+  SSE result. The OAuth JWT is NOT required for this endpoint. (The Auth0 token flow in
+  get_meltwater_token.py keeps returning access_denied because a DCR-registered third-
+  party client isn't authorized for the MCP API audience — an admin/first-party gate, not
+  a code bug; parked behind optional env vars.) Made make_mcp_tool_fn's Bearer token
+  optional (sent only if present) and _resolve_statistics_fns now builds the MCP transport
+  on api-key alone (JWT optional); non-MCP URLs still require the JWT. .env.example updated
+  to the 2-line api-key setup. Suite 34/34 (added test_resolve_statistics_fns_mcp_apikey_
+  only). REMAINING to confirm in-app: real statistics tool NAME on the server (tools/list)
+  — default MELTWATER_STATS_TOOL=unified_retrieval_statistics_retrieval_tool, override via
+  env. Live path is now: cp .env.example .env (already has api-key) -> run_local.sh ->
+  Live mode.
+- 2026-06-02: Document retrieval (Media articles) wired live. Captured a real
+  document_retrieval response via the connected MCP — shape is the expected
+  [{type,text}] -> resources[].resource (kind resource.document, content/title/url/date),
+  exactly what _parse_retrieval_envelope + _map_media already handle (no mapper change).
+  Added MELTWATER_DOC_TOOL=unified_retrieval_document_retrieval_tool and
+  _resolve_retrieval_fn (api-key MCP transport via make_mcp_tool_fn + build_media_query;
+  JWT optional; None when no creds so media_adapter keeps its fixture fallback). Wired into
+  generate_battlecard live branch. Saved fixtures/live_docs_salesforce.com.json
+  (real-shape, real SF Q1 FY27 content). Tests: parse+map real doc envelope (3 articles,
+  source parsed, minimal doc handled), resolver api-key-only/override. Suite 36/36. Also
+  added --max-time 25 to list_mcp_tools.sh (SSE stream stays open -> curl was hanging).
+  Live Media now = statistics (volume+sentiment) + documents (articles), all via api-key.

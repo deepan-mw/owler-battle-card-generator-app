@@ -1,0 +1,6 @@
+[
+  {
+    "type": "text",
+    "text": "{\"resources\": [{\"kind\": \"resource.annotated\", \"resource\": {\"kind\": \"resource.document\", \"title\": \"Salesforce Announces Strong First Quarter Fiscal 2027 Results\", \"content\": \"GAAP EPS $2.42, up 52% Y/Y, Non-GAAP EPS $3.88, up 50% Y/Y. Salesforce (NYSE: CRM), the world's #1 AI CRM, announced record first quarter revenue of $11.1 billion, up 13% Y/Y. Agentforce now powers every Customer 360 application. 'This was an outstanding quarter \\u2014 record revenue, record deals, and cash flow,' said Marc Benioff.\", \"url\": \"https://www.businesswire.com/news/salesforce-q1-fy27\", \"date\": \"2026-05-28\", \"source\": \"businesswire.com\"}}, {\"kind\": \"resource.annotated\", \"resource\": {\"kind\": \"resource.document\", \"content\": \"Analysts raise Salesforce price targets after the company beat expectations and expanded its agentic AI roadmap, citing strong Data Cloud growth and the Informatica contribution.\", \"url\": \"https://www.reuters.com/technology/salesforce-ai-roadmap\", \"date\": \"2026-05-30\"}}, {\"kind\": \"resource.annotated\", \"resource\": {\"kind\": \"resource.document\", \"content\": \"Some customers raise concerns about pricing pressure and discount negotiations as Salesforce pushes enterprise add-ons.\"}}]}"
+  }
+]

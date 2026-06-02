@@ -21,6 +21,8 @@ ENV/
 .env
 .env.*
 *.env
+# committed template (no real secrets):
+!.env.example
 
 # macOS
 .DS_Store

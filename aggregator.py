@@ -134,6 +134,88 @@ def make_http_statistics_fn(base_url: str, token: str, api_key: str | None = Non
     return _fn
 
 
+# Tool names on the Meltwater MCP server (override via env if they differ in prod).
+MELTWATER_STATS_TOOL = "unified_retrieval_statistics_retrieval_tool"
+MELTWATER_DOC_TOOL = "unified_retrieval_document_retrieval_tool"
+
+
+def _parse_mcp_response(status_code: int, content_type: str, text: str) -> dict:
+    """Parse an MCP Streamable-HTTP reply, which may be plain JSON or an SSE stream
+    (`data: {...}` lines). Returns the JSON-RPC object (with `result` or `error`)."""
+    is_sse = ("text/event-stream" in (content_type or "")
+              or text.lstrip().startswith(("event:", "data:")) or "\ndata:" in text)
+    if is_sse:
+        last = None
+        for line in text.splitlines():
+            line = line.strip()
+            if line.startswith("data:"):
+                try:
+                    obj = json.loads(line[5:].strip())
+                except Exception:
+                    continue
+                if isinstance(obj, dict) and ("result" in obj or "error" in obj):
+                    last = obj
+        if last is not None:
+            return last
+    return json.loads(text)
+
+
+def make_mcp_tool_fn(base_url: str, token: str | None = None, api_key: str | None = None, *,
+                     tool_name: str, arg_builder: Callable[[str], dict]) -> "RetrievalFn":
+    """Production transport for an MCP Streamable-HTTP server (e.g. the Meltwater MCP at
+    .../v1/internal/mcp). Performs the JSON-RPC handshake (initialize → initialized) then
+    `tools/call` with `arg_builder(domain)`, and returns the tool result `content`
+    (`[{"type":"text","text":"<json>"}]`) so the existing `_unwrap_envelope` /
+    `_map_statistics` parsing handles it unchanged.
+
+    Auth: the Meltwater MCP authenticates on the `api-key` (APIM subscription key) alone —
+    confirmed live 2026-06-02. The Bearer `token` is optional and only sent if provided.
+
+        sfn = make_mcp_tool_fn(os.environ["MELTWATER_MCP_URL"],
+                               api_key=os.environ["MELTWATER_MCP_API_KEY"],
+                               tool_name=MELTWATER_STATS_TOOL,
+                               arg_builder=build_volume_query)
+    Credentials come from env vars, never hardcoded.
+    """
+    async def _fn(domain: str) -> Any:
+        import httpx
+        headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/event-stream",
+        }
+        if token:
+            headers["Authorization"] = f"Bearer {token}"
+        if api_key:
+            headers["api-key"] = api_key
+        async with httpx.AsyncClient(timeout=30) as client:
+            # 1) initialize (some servers are stateless; best-effort session capture)
+            init = {"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {
+                "protocolVersion": "2025-06-18", "capabilities": {},
+                "clientInfo": {"name": "battlecard-generator", "version": "1.0"}}}
+            r = await client.post(base_url, json=init, headers=headers)
+            sid = r.headers.get("mcp-session-id") or r.headers.get("Mcp-Session-Id")
+            if sid:
+                headers["Mcp-Session-Id"] = sid
+            try:  # 2) initialized notification (ignored by stateless servers)
+                await client.post(base_url, headers=headers,
+                                  json={"jsonrpc": "2.0", "method": "notifications/initialized"})
+            except Exception:
+                pass
+            # 3) tools/call
+            call = {"jsonrpc": "2.0", "id": 2, "method": "tools/call",
+                    "params": {"name": tool_name, "arguments": arg_builder(domain)}}
+            r = await client.post(base_url, json=call, headers=headers)
+            r.raise_for_status()
+            data = _parse_mcp_response(r.status_code, r.headers.get("content-type", ""), r.text)
+            if "error" in data:
+                raise RuntimeError(f"MCP tool {tool_name} error: {data['error']}")
+            result = data.get("result", data)
+            if isinstance(result, dict) and "content" in result:
+                return result["content"]  # [{"type":"text","text": "<json>"}]
+            return result
+    return _fn
+
+
 def make_http_retrieval_fn(base_url: str, token: str,
                            query_builder: Callable[[str], dict] = build_media_query) -> "RetrievalFn":
     """Production media transport: POST to the retrieval HTTP API and return the
@@ -148,6 +230,35 @@ def make_http_retrieval_fn(base_url: str, token: str,
         async with httpx.AsyncClient(timeout=20) as client:
             resp = await client.post(base_url, json=query_builder(domain),
                                      headers={"Authorization": f"Bearer {token}"})
+            resp.raise_for_status()
+            return resp.json()
+    return _fn
+
+
+def _default_source_query(domain: str) -> dict:
+    """Minimal request body for the source MCPs (Owler/GenAI Lens/Gong). The exact
+    shape is unconfirmed until provisioning — adjust per the real API, same as the
+    statistics envelope guess. The corresponding `_map_*` handles the RESPONSE shape."""
+    return {"domain": domain}
+
+
+def make_http_source_fn(base_url: str, token: str, api_key: str | None = None,
+                        query_builder: Callable[[str], dict] = _default_source_query
+                        ) -> "SourceFn":
+    """Generic production transport for the per-source MCPs (Owler / GenAI Lens / Gong):
+    POST {query_builder(domain)} with Bearer auth (+ optional api-key header) and return
+    the raw response for the matching `_map_*`. Credentials come from env vars, never
+    hardcoded; e.g.
+        ofn = make_http_source_fn(os.environ["OWLER_MCP_URL"], os.environ["OWLER_MCP_JWT"])
+        await generate_battlecard("salesforce.com", owler_fn=ofn)
+    """
+    async def _fn(domain: str) -> Any:
+        import httpx  # lazy: only needed when this transport is selected
+        headers = {"Authorization": f"Bearer {token}"}
+        if api_key:
+            headers["api-key"] = api_key
+        async with httpx.AsyncClient(timeout=20) as client:
+            resp = await client.post(base_url, json=query_builder(domain), headers=headers)
             resp.raise_for_status()
             return resp.json()
     return _fn
@@ -328,19 +439,63 @@ def _sentiment_from_breakdown(buckets: list[dict]) -> str | None:
     return "positive" if pos > neg * 1.5 else "negative" if neg > pos * 1.5 else "mixed"
 
 
+def _collect_agg_buckets(payload: Any, agg_type: str) -> list[dict]:
+    """Walk a Meltwater unified-aggregation envelope and sum bucket counts by key for
+    every nested aggregation whose `type` matches `agg_type` ("date" or "sentiment").
+
+    Real shape (confirmed live 2026-06-02):
+        resources[].resource.buckets[platform].aggregations[].buckets[]
+    where each leaf bucket is {"key": <date|sentiment>, "values": {"count": N}}.
+    Series are split per platform, so we aggregate by key across all platforms.
+    Returns [{"key": k, "count": total}] sorted by key (dates sort chronologically)."""
+    totals: dict[str, float] = {}
+
+    def walk(node: Any) -> None:
+        if isinstance(node, dict):
+            if node.get("type") == agg_type and isinstance(node.get("buckets"), list):
+                for b in node["buckets"]:
+                    if not isinstance(b, dict):
+                        continue
+                    k = b.get("key")
+                    if k is None:
+                        continue
+                    totals[k] = totals.get(k, 0.0) + _bucket_value(b.get("values", b))
+            for v in node.values():
+                walk(v)
+        elif isinstance(node, list):
+            for x in node:
+                walk(x)
+
+    walk(payload)
+    return [{"key": k, "count": totals[k]} for k in sorted(totals)]
+
+
 def _map_statistics(volume_env: Any = None, sentiment_env: Any = None) -> dict:
     """Map statistics_retrieval envelopes → {volume_trend, sentiment}. Either may be
-    omitted; missing/unparseable inputs yield None for that field (honest degrade)."""
+    omitted; missing/unparseable inputs yield None for that field (honest degrade).
+
+    Tries the generic `_find_buckets` heuristic first (covers the simpler sample
+    fixtures), then falls back to the confirmed Meltwater unified-aggregation walker
+    (`_collect_agg_buckets`) for the real `resources[].resource.buckets[]` shape."""
     out: dict = {"volume_trend": None, "sentiment": None}
     if volume_env is not None:
         try:
-            series = _find_buckets(_unwrap_envelope(volume_env), ("time", "date", "week", "day", "period"))
+            payload = _unwrap_envelope(volume_env)
+            series = _find_buckets(payload, ("time", "date", "week", "day", "period"))
+            if not series:
+                series = _collect_agg_buckets(payload, "date")
             out["volume_trend"] = _volume_trend_from_series(series)
         except Exception:
             pass
     if sentiment_env is not None:
         try:
-            buckets = _find_buckets(_unwrap_envelope(sentiment_env), ("sentiment",))
+            payload = _unwrap_envelope(sentiment_env)
+            buckets = _find_buckets(payload, ("sentiment",))
+            if not buckets or not any(
+                str(_first(b, "sentiment", "label", "key", "name", default="")).lower()
+                in ("positive", "negative", "neutral") for b in buckets
+            ):
+                buckets = _collect_agg_buckets(payload, "sentiment")
             out["sentiment"] = _sentiment_from_breakdown(buckets)
         except Exception:
             pass
@@ -1099,23 +1254,94 @@ def _resolve_statistics_fns(
 ) -> "tuple[RetrievalFn | None, RetrievalFn | None]":
     """Resolve the Media statistics transports for live mode.
 
-    Explicit override wins. Otherwise, if MELTWATER_MCP_URL + MELTWATER_MCP_JWT are
-    present in the environment, build real HTTP transports (volume + sentiment) via
-    `make_http_statistics_fn`. With no creds, returns (None, None) so the card
-    degrades honestly (volume_trend stays null, no fabrication).
+    Explicit override wins. Otherwise build real transports (volume + sentiment) when the
+    env has MELTWATER_MCP_URL plus credentials. An MCP endpoint (URL containing "/mcp")
+    uses the JSON-RPC `make_mcp_tool_fn` and authenticates on MELTWATER_MCP_API_KEY alone
+    (the APIM subscription key — confirmed sufficient live; the Bearer JWT is optional).
+    A non-MCP URL uses the plain-POST `make_http_statistics_fn` and needs the JWT. With no
+    creds, returns (None, None) so the card degrades honestly (no fabrication).
 
-        export MELTWATER_MCP_URL=... MELTWATER_MCP_JWT=... [MELTWATER_MCP_API_KEY=...]
+        export MELTWATER_MCP_URL=... MELTWATER_MCP_API_KEY=...   # MCP: api-key is enough
+        # optional: Bearer JWT (only if a future endpoint requires user-scoped auth)
+        export MELTWATER_MCP_JWT=...
+        # optional: override the tool name if it differs in prod
+        export MELTWATER_MCP_STATS_TOOL=unified_retrieval_statistics_retrieval_tool
     """
     url = os.environ.get("MELTWATER_MCP_URL")
     jwt = os.environ.get("MELTWATER_MCP_JWT")
     api_key = os.environ.get("MELTWATER_MCP_API_KEY")
-    if stats_fn is None and url and jwt:
-        stats_fn = make_http_statistics_fn(url, jwt, api_key,
-                                           query_builder=build_volume_query)
-    if sentiment_fn is None and url and jwt:
-        sentiment_fn = make_http_statistics_fn(url, jwt, api_key,
-                                               query_builder=build_sentiment_query)
+    tool = os.environ.get("MELTWATER_MCP_STATS_TOOL", MELTWATER_STATS_TOOL)
+    is_mcp = bool(url) and "/mcp" in url
+    # MCP authenticates on api-key alone; non-MCP HTTP needs the JWT.
+    have_creds = bool(url) and ((api_key or jwt) if is_mcp else bool(jwt))
+
+    def _build(query_builder):
+        if is_mcp:
+            return make_mcp_tool_fn(url, jwt, api_key, tool_name=tool,
+                                    arg_builder=query_builder)
+        return make_http_statistics_fn(url, jwt, api_key, query_builder=query_builder)
+
+    if stats_fn is None and have_creds:
+        stats_fn = _build(build_volume_query)
+    if sentiment_fn is None and have_creds:
+        sentiment_fn = _build(build_sentiment_query)
     return stats_fn, sentiment_fn
+
+
+def _resolve_retrieval_fn(retrieval_fn: "RetrievalFn | None") -> "RetrievalFn | None":
+    """Resolve the Media DOCUMENT transport (news articles) for live mode.
+
+    Explicit override wins. Otherwise, if MELTWATER_MCP_URL is an MCP endpoint with an
+    api-key (JWT optional), build the document-retrieval transport via `make_mcp_tool_fn`
+    (tool name MELTWATER_DOC_TOOL, args from `build_media_query`). With no creds, returns
+    None — `media_adapter` then falls back to its captured fixture (unchanged behavior).
+    Response shape ([{type,text}] -> resources[].resource) is what `_parse_retrieval_
+    envelope` already handles (confirmed live 2026-06-02)."""
+    if retrieval_fn is not None:
+        return retrieval_fn
+    url = os.environ.get("MELTWATER_MCP_URL")
+    jwt = os.environ.get("MELTWATER_MCP_JWT")
+    api_key = os.environ.get("MELTWATER_MCP_API_KEY")
+    tool = os.environ.get("MELTWATER_MCP_DOC_TOOL", MELTWATER_DOC_TOOL)
+    if url and "/mcp" in url and (api_key or jwt):
+        return make_mcp_tool_fn(url, jwt, api_key, tool_name=tool, arg_builder=build_media_query)
+    return None
+
+
+# Per-source env-var prefixes for the live transports. Each is independent: a source
+# goes live only when ITS url+token are set; otherwise it stays None and the card
+# degrades honestly for that source (no mock, no fabrication).
+_SOURCE_ENV = {
+    "owler": ("OWLER_MCP_URL", "OWLER_MCP_JWT", "OWLER_MCP_API_KEY"),
+    "genai": ("GENAI_LENS_MCP_URL", "GENAI_LENS_MCP_JWT", "GENAI_LENS_MCP_API_KEY"),
+    "gong": ("GONG_API_URL", "GONG_API_TOKEN", "GONG_API_KEY"),
+}
+
+
+def _resolve_source_fns(
+    owler_fn: "SourceFn | None",
+    genai_fn: "SourceFn | None",
+    gong_fn: "SourceFn | None",
+) -> "tuple[SourceFn | None, SourceFn | None, SourceFn | None]":
+    """Resolve Owler / GenAI Lens / Gong transports for live mode.
+
+    Explicit override wins per source. Otherwise, for each source whose
+    <PREFIX>_URL + <PREFIX>_(JWT|TOKEN) are in the environment, build an HTTP transport
+    via `make_http_source_fn`. Sources without creds stay None (honest degrade).
+
+        export OWLER_MCP_URL=... OWLER_MCP_JWT=...
+        export GENAI_LENS_MCP_URL=... GENAI_LENS_MCP_JWT=...
+        export GONG_API_URL=... GONG_API_TOKEN=...
+    """
+    resolved = {"owler": owler_fn, "genai": genai_fn, "gong": gong_fn}
+    for name, (url_k, tok_k, key_k) in _SOURCE_ENV.items():
+        if resolved[name] is not None:
+            continue  # explicit override
+        url, tok, api_key = (os.environ.get(url_k), os.environ.get(tok_k),
+                             os.environ.get(key_k))
+        if url and tok:
+            resolved[name] = make_http_source_fn(url, tok, api_key)
+    return resolved["owler"], resolved["genai"], resolved["gong"]
 
 
 def _extract_json(text: str) -> dict:
@@ -1197,8 +1423,10 @@ async def generate_battlecard(domain: str, vs: str | None = None, fresh: bool = 
         genai_fn = genai_fn or demo_genai_fn
         gong_fn = gong_fn or demo_gong_fn
         media_fn = media_fn or demo_media_fn
-    else:  # live: auto-wire Media statistics transports from env creds (else None)
+    else:  # live: auto-wire transports from env creds (each source independent; else None)
+        retrieval_fn = _resolve_retrieval_fn(retrieval_fn)
         stats_fn, sentiment_fn = _resolve_statistics_fns(stats_fn, sentiment_fn)
+        owler_fn, genai_fn, gong_fn = _resolve_source_fns(owler_fn, genai_fn, gong_fn)
     raw = await fetch_all(domain, retrieval_fn, owler_fn, genai_fn, gong_fn,
                           stats_fn, sentiment_fn, media_fn)
     if demo:  # tag sample-backed sources so attribution reads "(sample data)"

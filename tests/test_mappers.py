@@ -291,6 +291,188 @@ def test_resolve_statistics_fns_explicit_override_wins():
         _clear_mcp_env()
 
 
+def test_parse_mcp_response_json_and_sse():
+    js = json.dumps({"jsonrpc": "2.0", "id": 2, "result": {"content": [{"type": "text", "text": "{}"}]}})
+    assert A._parse_mcp_response(200, "application/json", js)["result"]["content"][0]["type"] == "text"
+    sse = ("event: message\n"
+           'data: {"jsonrpc":"2.0","id":2,"result":{"content":[{"type":"text","text":"{\\"ok\\":1}"}]}}\n\n')
+    out = A._parse_mcp_response(200, "text/event-stream", sse)
+    assert out["result"]["content"][0]["text"] == '{"ok":1}'
+
+
+def test_make_mcp_tool_fn_frames_and_unwraps():
+    # Mock httpx so make_mcp_tool_fn runs offline: capture the tools/call body and
+    # return the REAL captured volume payload wrapped as MCP content.
+    import httpx
+    real = _load("live_stats_volume_salesforce.com.json")
+    calls = []
+
+    class _Resp:
+        def __init__(self, body, ct="application/json", headers=None):
+            self._body = body; self.status_code = 200
+            self.headers = {"content-type": ct, **(headers or {})}
+        @property
+        def text(self): return self._body
+        def raise_for_status(self): pass
+
+    class _Client:
+        def __init__(self, *a, **k): pass
+        async def __aenter__(self): return self
+        async def __aexit__(self, *a): return False
+        async def post(self, url, json=None, headers=None):
+            calls.append(json or {})
+            method = (json or {}).get("method")
+            if method == "initialize":
+                return _Resp('{"jsonrpc":"2.0","id":1,"result":{}}',
+                             headers={"mcp-session-id": "sess-123"})
+            if method == "tools/call":
+                import json as _j
+                wrapped = {"jsonrpc": "2.0", "id": 2,
+                           "result": {"content": [{"type": "text", "text": _j.dumps(real)}]}}
+                return _Resp(_j.dumps(wrapped))
+            return _Resp('{"jsonrpc":"2.0","result":{}}')
+
+    orig = httpx.AsyncClient
+    httpx.AsyncClient = _Client
+    try:
+        fn = A.make_mcp_tool_fn("https://x.test/v1/internal/mcp", "jwt", "apikey",
+                                tool_name=A.MELTWATER_STATS_TOOL, arg_builder=A.build_volume_query)
+        content = asyncio.run(fn("salesforce.com"))
+    finally:
+        httpx.AsyncClient = orig
+    # the tools/call was framed correctly
+    tc = [c for c in calls if c.get("method") == "tools/call"][0]
+    assert tc["params"]["name"] == A.MELTWATER_STATS_TOOL
+    assert "query" in tc["params"]["arguments"] and tc["params"]["arguments"]["platforms"] == ["news"]
+    # returned content unwraps + maps through the real pipeline
+    assert A._map_statistics(content, None)["volume_trend"] == "up"
+
+
+def test_resolve_statistics_fns_uses_mcp_for_mcp_url():
+    saved = {k: os.environ.get(k) for k in
+             ("MELTWATER_MCP_URL", "MELTWATER_MCP_JWT", "MELTWATER_MCP_API_KEY")}
+    try:
+        os.environ["MELTWATER_MCP_URL"] = "https://x.test/v1/internal/mcp"
+        os.environ["MELTWATER_MCP_JWT"] = "jwt"
+        sfn, _ = A._resolve_statistics_fns(None, None)
+        assert asyncio.iscoroutinefunction(sfn)  # MCP transport built for /mcp URL
+    finally:
+        for k in ("MELTWATER_MCP_URL", "MELTWATER_MCP_JWT", "MELTWATER_MCP_API_KEY"):
+            os.environ.pop(k, None)
+        for k, v in saved.items():
+            if v is not None:
+                os.environ[k] = v
+
+
+def test_parse_and_map_real_document_envelope():
+    # Real-shape document_retrieval envelope (captured live 2026-06-02).
+    env = _load("live_docs_salesforce.com.json")
+    docs = A._parse_retrieval_envelope(env)
+    assert len(docs) == 3
+    m = A._map_media(docs)
+    assert len(m["articles"]) == 3
+    assert m["articles"][0]["source"] == "businesswire.com"
+    assert m["articles"][2]["headline"]          # minimal doc still gets a headline fallback
+    assert m["sentiment"] in ("positive", "negative", "neutral", "mixed", None)
+
+
+def test_resolve_retrieval_fn_mcp_apikey_only():
+    saved = {k: os.environ.get(k) for k in
+             ("MELTWATER_MCP_URL", "MELTWATER_MCP_JWT", "MELTWATER_MCP_API_KEY")}
+    try:
+        for k in saved:
+            os.environ.pop(k, None)
+        # no creds -> None (media_adapter falls back to fixture)
+        assert A._resolve_retrieval_fn(None) is None
+        # api-key only on an MCP url -> transport built
+        os.environ["MELTWATER_MCP_URL"] = "https://x.test/v1/internal/mcp"
+        os.environ["MELTWATER_MCP_API_KEY"] = "apikey-only"
+        assert asyncio.iscoroutinefunction(A._resolve_retrieval_fn(None))
+        # explicit override always wins
+        async def _stub(d): return {}
+        assert A._resolve_retrieval_fn(_stub) is _stub
+    finally:
+        for k in saved:
+            os.environ.pop(k, None)
+        for k, v in saved.items():
+            if v is not None:
+                os.environ[k] = v
+
+
+def test_resolve_statistics_fns_mcp_apikey_only():
+    # MCP endpoint authenticates on api-key alone — no JWT required.
+    saved = {k: os.environ.get(k) for k in
+             ("MELTWATER_MCP_URL", "MELTWATER_MCP_JWT", "MELTWATER_MCP_API_KEY")}
+    try:
+        for k in saved:
+            os.environ.pop(k, None)
+        os.environ["MELTWATER_MCP_URL"] = "https://x.test/v1/internal/mcp"
+        os.environ["MELTWATER_MCP_API_KEY"] = "apikey-only"  # no JWT
+        sfn, sentfn = A._resolve_statistics_fns(None, None)
+        assert asyncio.iscoroutinefunction(sfn) and asyncio.iscoroutinefunction(sentfn)
+    finally:
+        for k in saved:
+            os.environ.pop(k, None)
+        for k, v in saved.items():
+            if v is not None:
+                os.environ[k] = v
+
+
+def test_map_statistics_real_meltwater_shape():
+    # Real responses captured live 2026-06-02 from the Meltwater statistics MCP.
+    vol = _load("live_stats_volume_salesforce.com.json")
+    sent = _load("live_stats_sentiment_salesforce.com.json")
+    # series aggregated across all platforms, summed by week
+    series = A._collect_agg_buckets(vol, "date")
+    assert [b["key"] for b in series] == [
+        "2026-04-27", "2026-05-04", "2026-05-11", "2026-05-18", "2026-05-25", "2026-06-01"]
+    assert series[1]["count"] == 27206 + 4972 + 219 + 158  # 2026-05-04 across 4 platforms
+    out = A._map_statistics(vol, sent)
+    assert out["volume_trend"] == "up"       # newer weeks outweigh older
+    assert out["sentiment"] == "positive"    # 25.8k positive vs 2.8k negative
+
+
+def _clear_source_env():
+    for keys in A._SOURCE_ENV.values():
+        for k in keys:
+            os.environ.pop(k, None)
+
+
+def test_resolve_source_fns_no_creds_returns_none():
+    _clear_source_env()
+    assert A._resolve_source_fns(None, None, None) == (None, None, None)
+
+
+def test_resolve_source_fns_per_source_independent():
+    _clear_source_env()
+    try:
+        # only Owler creds set -> only owler_fn built
+        os.environ["OWLER_MCP_URL"] = "https://owler.test/mcp"
+        os.environ["OWLER_MCP_JWT"] = "owler-jwt"
+        ofn, gfn, ggn = A._resolve_source_fns(None, None, None)
+        assert asyncio.iscoroutinefunction(ofn)
+        assert gfn is None and ggn is None
+        # partial creds (url only) for genai -> stays None
+        os.environ["GENAI_LENS_MCP_URL"] = "https://genai.test/mcp"
+        ofn, gfn, ggn = A._resolve_source_fns(None, None, None)
+        assert gfn is None
+    finally:
+        _clear_source_env()
+
+
+def test_resolve_source_fns_explicit_override_wins():
+    async def _stub(domain):
+        return {}
+    _clear_source_env()
+    os.environ["GONG_API_URL"] = "https://gong.test/api"
+    os.environ["GONG_API_TOKEN"] = "gong-tok"
+    try:
+        ofn, gfn, ggn = A._resolve_source_fns(None, None, _stub)
+        assert ggn is _stub  # explicit arg not overwritten by env
+    finally:
+        _clear_source_env()
+
+
 if __name__ == "__main__":
     for name, fn in sorted(globals().items()):
         if name.startswith("test_") and callable(fn):

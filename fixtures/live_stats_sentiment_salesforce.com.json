@@ -1,0 +1,119 @@
+{
+  "resources": [
+    {
+      "kind": "resource.annotated",
+      "resource": {
+        "kind": "resource.aggregation",
+        "label": "Salesforce sentiment breakdown",
+        "type": "platform",
+        "metrics": ["count"],
+        "buckets": [
+          {
+            "agg_id": "platform_count",
+            "key": "news-online",
+            "values": {"count": 71190},
+            "aggregations": [
+              {
+                "kind": "resource.aggregation",
+                "label": "sentiment",
+                "type": "sentiment",
+                "metrics": ["count"],
+                "buckets": [
+                  {"agg_id": "sentiment_count", "key": "neutral", "values": {"count": 45210}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "sentiment_count", "key": "positive", "values": {"count": 23174}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "sentiment_count", "key": "negative", "values": {"count": 2763}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "sentiment_count", "key": "unknown", "values": {"count": 43}, "aggregations": [], "user": null, "location": null}
+                ],
+                "total": {"count": 71190}
+              }
+            ],
+            "user": null,
+            "location": null
+          },
+          {
+            "agg_id": "platform_count",
+            "key": "broadcast-tv",
+            "values": {"count": 7125},
+            "aggregations": [
+              {
+                "kind": "resource.aggregation",
+                "label": "sentiment",
+                "type": "sentiment",
+                "metrics": ["count"],
+                "buckets": [
+                  {"agg_id": "sentiment_count", "key": "neutral", "values": {"count": 4557}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "sentiment_count", "key": "positive", "values": {"count": 2554}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "sentiment_count", "key": "negative", "values": {"count": 14}, "aggregations": [], "user": null, "location": null}
+                ],
+                "total": {"count": 7125}
+              }
+            ],
+            "user": null,
+            "location": null
+          },
+          {
+            "agg_id": "platform_count",
+            "key": "broadcast-audio",
+            "values": {"count": 666},
+            "aggregations": [
+              {
+                "kind": "resource.aggregation",
+                "label": "sentiment",
+                "type": "sentiment",
+                "metrics": ["count"],
+                "buckets": [
+                  {"agg_id": "sentiment_count", "key": "neutral", "values": {"count": 664}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "sentiment_count", "key": "positive", "values": {"count": 1}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "sentiment_count", "key": "negative", "values": {"count": 1}, "aggregations": [], "user": null, "location": null}
+                ],
+                "total": {"count": 666}
+              }
+            ],
+            "user": null,
+            "location": null
+          },
+          {
+            "agg_id": "platform_count",
+            "key": "news-print",
+            "values": {"count": 301},
+            "aggregations": [
+              {
+                "kind": "resource.aggregation",
+                "label": "sentiment",
+                "type": "sentiment",
+                "metrics": ["count"],
+                "buckets": [
+                  {"agg_id": "sentiment_count", "key": "neutral", "values": {"count": 176}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "sentiment_count", "key": "positive", "values": {"count": 92}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "sentiment_count", "key": "negative", "values": {"count": 26}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "sentiment_count", "key": "unknown", "values": {"count": 7}, "aggregations": [], "user": null, "location": null}
+                ],
+                "total": {"count": 301}
+              }
+            ],
+            "user": null,
+            "location": null
+          }
+        ],
+        "total": {"count": 79282}
+      },
+      "annotations": {
+        "score": {"key": "unified_search_aggregations", "score": 1},
+        "origin": {"key": "unified_search_aggregations", "score": 1, "search_id": "602844c7"}
+      },
+      "history": [{"key": "unified_search_aggregations", "score": 1, "search_id": "602844c7"}]
+    }
+  ],
+  "requests": {
+    "602844c7": {
+      "filters": {
+        "operator": "and",
+        "subqueries": [
+          {"platforms": ["broadcast-tv", "news-app", "news-online", "news", "broadcast-audio", "news-print"]},
+          {"full_text_query": "(\"Salesforce\" OR \"Salesforce.com\" OR \"SFDC\")"},
+          {"start_date": "2026-05-19", "end_date": "2026-06-02", "timezone": null}
+        ]
+      }
+    }
+  }
+}

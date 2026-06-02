@@ -1,0 +1,129 @@
+{
+  "resources": [
+    {
+      "kind": "resource.annotated",
+      "resource": {
+        "kind": "resource.aggregation",
+        "label": "Weekly document count for Salesforce",
+        "type": "platform",
+        "metrics": ["count"],
+        "buckets": [
+          {
+            "agg_id": "platform_count",
+            "key": "news-online",
+            "values": {"count": 146065},
+            "aggregations": [
+              {
+                "kind": "resource.aggregation",
+                "label": "week",
+                "type": "date",
+                "metrics": ["count"],
+                "buckets": [
+                  {"agg_id": "date_count", "key": "2026-04-27", "values": {"count": 1013}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "date_count", "key": "2026-05-04", "values": {"count": 27206}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "date_count", "key": "2026-05-11", "values": {"count": 33320}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "date_count", "key": "2026-05-18", "values": {"count": 35851}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "date_count", "key": "2026-05-25", "values": {"count": 43047}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "date_count", "key": "2026-06-01", "values": {"count": 5628}, "aggregations": [], "user": null, "location": null}
+                ],
+                "total": {"count": 146065}
+              }
+            ],
+            "user": null,
+            "location": null
+          },
+          {
+            "agg_id": "platform_count",
+            "key": "broadcast-tv",
+            "values": {"count": 13620},
+            "aggregations": [
+              {
+                "kind": "resource.aggregation",
+                "label": "week",
+                "type": "date",
+                "metrics": ["count"],
+                "buckets": [
+                  {"agg_id": "date_count", "key": "2026-04-27", "values": {"count": 35}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "date_count", "key": "2026-05-04", "values": {"count": 4972}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "date_count", "key": "2026-05-11", "values": {"count": 1025}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "date_count", "key": "2026-05-18", "values": {"count": 2257}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "date_count", "key": "2026-05-25", "values": {"count": 5228}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "date_count", "key": "2026-06-01", "values": {"count": 103}, "aggregations": [], "user": null, "location": null}
+                ],
+                "total": {"count": 13620}
+              }
+            ],
+            "user": null,
+            "location": null
+          },
+          {
+            "agg_id": "platform_count",
+            "key": "broadcast-audio",
+            "values": {"count": 1277},
+            "aggregations": [
+              {
+                "kind": "resource.aggregation",
+                "label": "week",
+                "type": "date",
+                "metrics": ["count"],
+                "buckets": [
+                  {"agg_id": "date_count", "key": "2026-04-27", "values": {"count": 16}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "date_count", "key": "2026-05-04", "values": {"count": 219}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "date_count", "key": "2026-05-11", "values": {"count": 253}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "date_count", "key": "2026-05-18", "values": {"count": 252}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "date_count", "key": "2026-05-25", "values": {"count": 490}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "date_count", "key": "2026-06-01", "values": {"count": 47}, "aggregations": [], "user": null, "location": null}
+                ],
+                "total": {"count": 1277}
+              }
+            ],
+            "user": null,
+            "location": null
+          },
+          {
+            "agg_id": "platform_count",
+            "key": "news-print",
+            "values": {"count": 714},
+            "aggregations": [
+              {
+                "kind": "resource.aggregation",
+                "label": "week",
+                "type": "date",
+                "metrics": ["count"],
+                "buckets": [
+                  {"agg_id": "date_count", "key": "2026-04-27", "values": {"count": 13}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "date_count", "key": "2026-05-04", "values": {"count": 158}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "date_count", "key": "2026-05-11", "values": {"count": 173}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "date_count", "key": "2026-05-18", "values": {"count": 162}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "date_count", "key": "2026-05-25", "values": {"count": 168}, "aggregations": [], "user": null, "location": null},
+                  {"agg_id": "date_count", "key": "2026-06-01", "values": {"count": 40}, "aggregations": [], "user": null, "location": null}
+                ],
+                "total": {"count": 714}
+              }
+            ],
+            "user": null,
+            "location": null
+          }
+        ],
+        "total": {"count": 161676}
+      },
+      "annotations": {
+        "score": {"key": "unified_search_aggregations", "score": 1},
+        "origin": {"key": "unified_search_aggregations", "score": 1, "search_id": "067a4ec7"}
+      },
+      "history": [{"key": "unified_search_aggregations", "score": 1, "search_id": "067a4ec7"}]
+    }
+  ],
+  "requests": {
+    "067a4ec7": {
+      "filters": {
+        "operator": "and",
+        "subqueries": [
+          {"platforms": ["news-app", "news-online", "news", "news-print", "broadcast-tv", "broadcast-audio"]},
+          {"full_text_query": "(\"Salesforce\" OR \"Salesforce.com\" OR \"SFDC\" OR \"Dreamforce\" OR \"Sales Cloud\" OR \"Service Cloud\" OR \"Marketing Cloud\" OR \"Commerce Cloud\" OR \"Experience Cloud\" OR \"Data Cloud\" OR \"Einstein GPT\" OR \"Customer 360\" OR \"MuleSoft\" OR \"Tableau CRM\")"},
+          {"start_date": "2026-05-03", "end_date": "2026-06-02", "timezone": null}
+        ]
+      }
+    }
+  }
+}
