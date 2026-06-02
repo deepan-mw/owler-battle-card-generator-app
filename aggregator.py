@@ -1093,6 +1093,31 @@ def _resolve_llm_fn(llm_fn: LlmFn | None) -> LlmFn:
     return _default_llm_fn
 
 
+def _resolve_statistics_fns(
+    stats_fn: "RetrievalFn | None",
+    sentiment_fn: "RetrievalFn | None",
+) -> "tuple[RetrievalFn | None, RetrievalFn | None]":
+    """Resolve the Media statistics transports for live mode.
+
+    Explicit override wins. Otherwise, if MELTWATER_MCP_URL + MELTWATER_MCP_JWT are
+    present in the environment, build real HTTP transports (volume + sentiment) via
+    `make_http_statistics_fn`. With no creds, returns (None, None) so the card
+    degrades honestly (volume_trend stays null, no fabrication).
+
+        export MELTWATER_MCP_URL=... MELTWATER_MCP_JWT=... [MELTWATER_MCP_API_KEY=...]
+    """
+    url = os.environ.get("MELTWATER_MCP_URL")
+    jwt = os.environ.get("MELTWATER_MCP_JWT")
+    api_key = os.environ.get("MELTWATER_MCP_API_KEY")
+    if stats_fn is None and url and jwt:
+        stats_fn = make_http_statistics_fn(url, jwt, api_key,
+                                           query_builder=build_volume_query)
+    if sentiment_fn is None and url and jwt:
+        sentiment_fn = make_http_statistics_fn(url, jwt, api_key,
+                                               query_builder=build_sentiment_query)
+    return stats_fn, sentiment_fn
+
+
 def _extract_json(text: str) -> dict:
     """Parse a model completion that may be wrapped in prose or ```json fences."""
     text = (text or "").strip()
@@ -1172,6 +1197,8 @@ async def generate_battlecard(domain: str, vs: str | None = None, fresh: bool = 
         genai_fn = genai_fn or demo_genai_fn
         gong_fn = gong_fn or demo_gong_fn
         media_fn = media_fn or demo_media_fn
+    else:  # live: auto-wire Media statistics transports from env creds (else None)
+        stats_fn, sentiment_fn = _resolve_statistics_fns(stats_fn, sentiment_fn)
     raw = await fetch_all(domain, retrieval_fn, owler_fn, genai_fn, gong_fn,
                           stats_fn, sentiment_fn, media_fn)
     if demo:  # tag sample-backed sources so attribution reads "(sample data)"

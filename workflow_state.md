@@ -246,3 +246,38 @@ unknown-domain, vs-omitted. Cache identity confirmed. API 200/422 correct.
   legend (dims unused sources), simulated badge, skeleton loading, JSON export. Same
   API contract + sample fallback. Verified headless: full + degraded (null conf, missing
   sections, no vs) render with no JS errors; tabs/filters/ring/talk-track present.
+
+## Plan (2026-06-02b) — Go live on Media statistics (auto-wire from env) [approved]
+ANALYZE: make_http_statistics_fn + stats_fn/sentiment_fn already thread
+media_adapter→fetch_all→generate_battlecard, but live mode defaults them to None so
+news_feed.volume_trend stays null. BLUEPRINT: mirror _resolve_llm_fn — auto-build the
+two HTTP transports from env creds in live mode, else degrade honestly.
+1. Add _resolve_statistics_fns(stats_fn, sentiment_fn): explicit override wins; else if
+   MELTWATER_MCP_URL + MELTWATER_MCP_JWT present, build volume + sentiment transports via
+   make_http_statistics_fn (build_volume_query / build_sentiment_query); else (None,None).
+2. Call it in generate_battlecard live branch only (demo path untouched), before fetch_all.
+3. Tests: no-creds→(None,None); env-set→callable coroutines; partial creds (url only)→
+   (None,None); explicit override preserved.
+4. Caveat: first real capture still needs the real JWT (shared config has <JWT>
+   placeholder) — code is wired + tested; live call is a one-export-then-run step.
+
+## Log
+- 2026-06-02: CONSTRUCT done for Plan 2026-06-02b. Added _resolve_statistics_fns to
+  aggregator.py (after _resolve_llm_fn) + wired into generate_battlecard live branch
+  (`else: stats_fn, sentiment_fn = _resolve_statistics_fns(...)`). Added 3 tests to
+  tests/test_mappers.py (no-creds, env-builds, explicit-override). VALIDATE: full suite
+  26/26 pass; test_live_mode_unchanged still green (overall_confidence 0.0, no sample
+  data) so no-creds path is unchanged. Demo mode untouched. Pending (needs real JWT):
+  export MELTWATER_MCP_URL/_JWT[/_API_KEY], call generate_battlecard(mode="live"),
+  capture first statistics response into fixtures/ to confirm _map_statistics envelope.
+- 2026-06-02: Added scripts/capture_live_stats.py — env-driven helper that makes the
+  first real volume+sentiment statistics calls for a domain, saves each raw response to
+  fixtures/live_stats_{volume,sentiment}_<domain>.json, then runs _map_statistics over
+  them and prints the parse (warns if volume_trend is None → envelope shape differs from
+  guess). No creds → exits 2, writes nothing. Verified: syntax ok, symbols present,
+  no-creds run writes no files.
+- 2026-06-02: Added scripts/run_local.sh — one-command local launcher: starts uvicorn
+  (api:app, default :8000) + a static server for the UI (default :5500), prints the
+  correct URL (http://localhost:5500/frontend/index.html), tears both down on Ctrl-C.
+  Optional port args; warns to set localStorage.bc_api when API port != 8000. Fixes the
+  common "localhost:5500/index.html 404" and the "API not running" banner. bash -n clean.

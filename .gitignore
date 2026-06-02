@@ -46,3 +46,10 @@ htmlcov/
 # Distribution / packaging
 *.tar.gz
 *.zip
+
+# Node / tooling
+node_modules/
+
+# Deck/PDF render byproducts
+slide-*.jpg
+*.pdf

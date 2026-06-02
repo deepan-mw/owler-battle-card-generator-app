@@ -247,6 +247,50 @@ def test_live_mode_unchanged():
     assert "(sample data)" not in json.dumps(card)
 
 
+def _clear_mcp_env():
+    for k in ("MELTWATER_MCP_URL", "MELTWATER_MCP_JWT", "MELTWATER_MCP_API_KEY"):
+        os.environ.pop(k, None)
+
+
+def test_resolve_statistics_fns_no_creds_returns_none():
+    _clear_mcp_env()
+    assert A._resolve_statistics_fns(None, None) == (None, None)
+
+
+def test_resolve_statistics_fns_builds_from_env():
+    saved = {k: os.environ.get(k) for k in
+             ("MELTWATER_MCP_URL", "MELTWATER_MCP_JWT", "MELTWATER_MCP_API_KEY")}
+    try:
+        os.environ["MELTWATER_MCP_URL"] = "https://example.test/mcp"
+        os.environ["MELTWATER_MCP_JWT"] = "test-jwt"
+        os.environ.pop("MELTWATER_MCP_API_KEY", None)
+        sfn, sentfn = A._resolve_statistics_fns(None, None)
+        assert callable(sfn) and callable(sentfn)
+        assert asyncio.iscoroutinefunction(sfn)
+        # partial creds (url only) -> still None, no transport built
+        _clear_mcp_env()
+        os.environ["MELTWATER_MCP_URL"] = "https://example.test/mcp"
+        assert A._resolve_statistics_fns(None, None) == (None, None)
+    finally:
+        _clear_mcp_env()
+        for k, v in saved.items():
+            if v is not None:
+                os.environ[k] = v
+
+
+def test_resolve_statistics_fns_explicit_override_wins():
+    async def _stub(domain):
+        return {}
+    _clear_mcp_env()
+    os.environ["MELTWATER_MCP_URL"] = "https://example.test/mcp"
+    os.environ["MELTWATER_MCP_JWT"] = "test-jwt"
+    try:
+        sfn, sentfn = A._resolve_statistics_fns(_stub, _stub)
+        assert sfn is _stub and sentfn is _stub  # explicit args not overwritten
+    finally:
+        _clear_mcp_env()
+
+
 if __name__ == "__main__":
     for name, fn in sorted(globals().items()):
         if name.startswith("test_") and callable(fn):
