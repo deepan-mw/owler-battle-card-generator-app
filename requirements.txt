@@ -3,3 +3,4 @@ uvicorn
 jsonschema
 httpx  # live transports (MCP/HTTP) for Media statistics + per-source connectors
 anthropic  # optional: enables the real LLM transport when ANTHROPIC_API_KEY is set
+redis  # optional: persistent/shared card cache when REDIS_URL is set (else in-memory)

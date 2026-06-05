@@ -1,7 +1,42 @@
 # workflow_state.md — Owler Battlecard Engine
 
 ## Phase
-CONSTRUCT — Demo/Live dual-mode (plan approved 2026-06-02)
+CONSTRUCT — Production hardening (plan approved 2026-06-02, user delegated choice)
+
+## Log (2026-06-02k) — Redis-backed cache (production hardening #5)
+- Replaced the raw module-level `_cache` dict with a pluggable cache abstraction
+  (`get/set`): `_InMemoryCache` (default, per-process, TTL via stored timestamp) and
+  `_RedisCache` (native expiry via SETEX, JSON-serialized cards, namespaced
+  `battlecard:v1:`). Backend resolved once from env in `_build_cache`: `REDIS_URL` set
+  + `redis` importable + `ping()` ok → Redis, else in-memory. `get_cache()` lazily
+  builds; `set_cache()` is the test/wiring override (None resets).
+- All Redis ops are best-effort (try/except → miss/no-op), so a Redis outage degrades
+  to a cache miss, never a 500 in the request path. Confirmed: REDIS_URL set but pkg
+  absent → falls back to in-memory.
+- `generate_battlecard` now uses `get_cache()`. requirements.txt gained optional
+  `redis`; .env.example documents `REDIS_URL`.
+- VALIDATE: 43/43 tests pass (+4: in-mem hit/miss/TTL, fake-Redis roundtrip, error
+  degrades to miss/no-op, generate uses injected backend). API demo=200.
+- Remaining hardening: secrets mgmt.
+
+## Log (2026-06-02j) — production hardening: injection guard + graceful degrade
+- Picked up HANDOFF next-steps #4 (prompt-injection guard) and #5 (graceful degrade).
+  NOTE: these were first built in the stale `Battle_Card_Generator_June_2026/` copy,
+  then re-applied here (this GitHub repo is canonical — it has the demo/UI/head-to-head
+  work AND the live-auth work; the other folder lacks live-auth and is now superseded).
+- Prompt-injection guard (aggregator.py): `_sanitize_for_prompt` applied in
+  `_build_prompt` (single chokepoint, all sections). Recursively scrubs string VALUES:
+  strips `<<DATA>>`/`<<END>>`/`SECTION=` tokens (no breakout / forged section), redacts
+  injection imperatives ("ignore previous instructions" etc.) → "[redacted]", caps at
+  2000 chars. Benign text untouched.
+- Graceful degradation (api.py + aggregator.py): `aggregator.degraded_card()` builds a
+  schema-valid empty card via `normalize` (all sources None) + `meta.degraded` /
+  `meta.degraded_reason`. Added optional `degraded`/`degraded_reason` to schema `meta`
+  (additionalProperties stays False). api.py returns the degraded card with 200 on
+  schema violation instead of 500; only 500 if the fallback itself fails to validate.
+- VALIDATE: 39/39 tests pass (+3). API TestClient: demo=200, bad mode=422, forced
+  schema violation → 200 degraded + schema-valid + reason carries the violation.
+- HANDOFF.md next-steps #4/#5 updated (guard + degrade now done).
 
 ## Plan (2026-06-02) — Two-mode demo support from Arun's sample data
 Arun delivered credible, real-shaped sample responses for all four sources in

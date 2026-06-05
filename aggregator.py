@@ -26,7 +26,89 @@ from urllib.parse import urlparse
 
 CACHE_TTL = 86400  # 24h
 CONFIDENCE_FLOOR = 0.5  # sections below this are regenerated once
-_cache: dict[str, tuple[float, dict]] = {}
+
+
+# --- Cache backends -------------------------------------------------------
+# Pluggable card cache so the engine survives restart/scale-out when backed by
+# Redis, yet runs with zero infra by default. Backend is chosen once from env:
+# REDIS_URL set + `redis` importable + reachable -> Redis (native TTL via SETEX),
+# else an in-memory dict. All cache ops are best-effort: a Redis hiccup degrades
+# to a cache miss / no-op, never an error in the request path.
+_CACHE_NS = "battlecard:v1:"
+
+
+class _InMemoryCache:
+    """Process-local cache (does not survive restart or scale beyond one process)."""
+    def __init__(self) -> None:
+        self._d: dict[str, tuple[float, dict]] = {}
+
+    def get(self, key: str):
+        hit = self._d.get(key)
+        if not hit:
+            return None
+        ts, card = hit
+        if time.time() - ts >= CACHE_TTL:
+            self._d.pop(key, None)
+            return None
+        return card
+
+    def set(self, key: str, card: dict) -> None:
+        self._d[key] = (time.time(), card)
+
+
+class _RedisCache:
+    """Redis-backed cache with native key expiry. Serializes cards as JSON.
+    Every call is wrapped so a connection error behaves as a miss / no-op."""
+    def __init__(self, client) -> None:
+        self._r = client
+
+    def get(self, key: str):
+        try:
+            raw = self._r.get(_CACHE_NS + key)
+        except Exception:
+            return None
+        if not raw:
+            return None
+        try:
+            return json.loads(raw)
+        except Exception:
+            return None
+
+    def set(self, key: str, card: dict) -> None:
+        try:
+            self._r.setex(_CACHE_NS + key, CACHE_TTL, json.dumps(card, default=str))
+        except Exception:
+            pass
+
+
+_cache_backend = None  # resolved lazily on first use
+
+
+def _build_cache():
+    url = os.environ.get("REDIS_URL")
+    if url:
+        try:
+            import redis  # optional dependency; only needed for the Redis backend
+            client = redis.Redis.from_url(url, socket_connect_timeout=2, socket_timeout=2)
+            client.ping()  # fail fast -> fall back to in-memory
+            return _RedisCache(client)
+        except Exception:
+            pass  # unreachable/misconfigured Redis -> degrade to in-memory
+    return _InMemoryCache()
+
+
+def get_cache():
+    """Return the active cache backend, building it once from env."""
+    global _cache_backend
+    if _cache_backend is None:
+        _cache_backend = _build_cache()
+    return _cache_backend
+
+
+def set_cache(backend) -> None:
+    """Override the cache backend (test hook / explicit wiring). Pass None to reset."""
+    global _cache_backend
+    _cache_backend = backend
 _FIXTURE_DIR = os.path.join(os.path.dirname(__file__), "fixtures")
 # Demo mode reads credible, real-shaped sample responses captured from the four
 # source tools (provided by QA). Mapped through the SAME mappers as live data, so
@@ -1048,6 +1130,17 @@ def normalize(domain: str, raw: dict, vs: str | None = None,
     return card
 
 
+def degraded_card(domain: str, vs: str | None = None, reason: str | None = None) -> dict:
+    """A guaranteed schema-valid, content-empty card. Built via `normalize` with all
+    sources absent (no synthesis output) so it is valid by construction — used as the
+    API's graceful fallback when a freshly generated card fails schema validation."""
+    empty = {"owler": None, "media": None, "genai_lens": None, "gong": None}
+    card = normalize(domain, empty, vs)
+    card["meta"]["degraded"] = True
+    card["meta"]["degraded_reason"] = reason or "card unavailable; returning empty card"
+    return card
+
+
 def _mark_simulated(card: dict, sim: set[str], sample: set[str] | None = None) -> None:
     """Append a provenance tag to every attribution label by source: '(simulated)'
     for mock sources, '(sample data)' for demo/sample-backed sources. Covers the
@@ -1114,8 +1207,42 @@ _REQUIRED_KEYS = {  # mirrors battlecard.schema.json item-level `required`
 }
 
 
+# Prompt-injection guard. Source text (esp. media article headlines/snippets) is
+# attacker-influenceable and flows into the LLM prompt's <<DATA>> block. A crafted
+# string could (a) forge the <<DATA>>/<<END>> delimiters or SECTION= tag to break out
+# of the data block / spoof a section, or (b) carry imperative instructions a real
+# model might follow. We neutralize both at the single chokepoint (_build_prompt).
+_PROMPT_TOKEN_RE = re.compile(r"<<\s*/?\s*(?:DATA|END)\s*>>|SECTION\s*=", re.I)
+_INJECTION_RE = re.compile(
+    r"(?i)\b(?:ignore|disregard|forget|override)\b[^.\n]{0,40}"
+    r"\b(?:previous|prior|above|earlier|all)\b[^.\n]{0,20}"
+    r"\b(?:instruction|prompt|direction|rule|context)s?\b"
+    r"|(?i)\b(?:system|developer)\s+prompt\b"
+    r"|(?i)\byou\s+are\s+now\b"
+    r"|(?i)\bnew\s+(?:instruction|rule|task)s?\b")
+_MAX_FIELD_LEN = 2000
+
+
+def _sanitize_for_prompt(node):
+    """Recursively neutralize untrusted text before it enters the LLM prompt.
+    Strips prompt delimiters/SECTION tokens, redacts injection imperatives, and caps
+    length. Keys are left intact; only string *values* are scrubbed."""
+    if isinstance(node, str):
+        s = _PROMPT_TOKEN_RE.sub(" ", node)
+        s = _INJECTION_RE.sub("[redacted]", s)
+        if len(s) > _MAX_FIELD_LEN:
+            s = s[:_MAX_FIELD_LEN] + "…"
+        return s
+    if isinstance(node, dict):
+        return {k: _sanitize_for_prompt(v) for k, v in node.items()}
+    if isinstance(node, list):
+        return [_sanitize_for_prompt(v) for v in node]
+    return node
+
+
 def _build_prompt(section: str, inputs: dict) -> str:
-    return _PROMPTS[section].replace("__DATA__", json.dumps(inputs, default=str))
+    safe = _sanitize_for_prompt(inputs)
+    return _PROMPTS[section].replace("__DATA__", json.dumps(safe, default=str))
 
 
 def _synth_claims(section: str, data: dict) -> list[dict]:
@@ -1414,10 +1541,11 @@ async def generate_battlecard(domain: str, vs: str | None = None, fresh: bool = 
     Explicitly-passed transports override the demo defaults per source."""
     demo = mode == "demo"
     key = f"{domain}|{vs}|{mode}"
-    if not fresh and key in _cache:
-        ts, card = _cache[key]
-        if time.time() - ts < CACHE_TTL:
-            return card
+    cache = get_cache()
+    if not fresh:
+        cached = cache.get(key)
+        if cached is not None:
+            return cached
     if demo:
         owler_fn = owler_fn or demo_owler_fn
         genai_fn = genai_fn or demo_genai_fn
@@ -1434,7 +1562,7 @@ async def generate_battlecard(domain: str, vs: str | None = None, fresh: bool = 
             if isinstance(v, dict):
                 v["_demo"] = True
     card = normalize(domain, raw, vs, llm_fn)
-    _cache[key] = (time.time(), card)
+    cache.set(key, card)
     return card
 
 

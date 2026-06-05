@@ -27,7 +27,15 @@
           "items": { "enum": ["owler", "media", "genai_lens", "gong"] },
           "uniqueItems": true
         },
-        "overall_confidence": { "$ref": "#/$defs/confidence" }
+        "overall_confidence": { "$ref": "#/$defs/confidence" },
+        "degraded": {
+          "type": "boolean",
+          "description": "True when the engine returned a content-empty fallback card (e.g. after a synthesis/validation failure) instead of a fully synthesized one."
+        },
+        "degraded_reason": {
+          "type": "string",
+          "description": "Human-readable explanation when degraded=true."
+        }
       }
     },
 

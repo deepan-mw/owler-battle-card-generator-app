@@ -143,10 +143,15 @@ mappers. See `docs/connector_access_request.md`.
    hackathon key — still need admin provisioning; Gong is a separate vendor.)
 3. Gong: confirm transcript shape vs `_iter_customer_lines`; add a proper NER pass to
    `_anonymize` (current baseline is regex + known names) before real transcripts.
-4. Set `ANTHROPIC_API_KEY` to switch synthesis from stub to real model; add a
-   prompt-injection guard (media article text flows into the LLM prompt).
-5. Production hardening: Redis cache (in-memory won't survive restart/scale); secrets
-   mgmt; graceful degradation instead of 500 on schema violation.
+4. Set `ANTHROPIC_API_KEY` to switch synthesis from stub to real model.
+   [DONE 2026-06-02j] Prompt-injection guard added: `_sanitize_for_prompt` in
+   `_build_prompt` scrubs untrusted media text (delimiter/SECTION breakout + injection
+   imperatives) before it enters the LLM prompt.
+5. Production hardening. [DONE 2026-06-02j] Graceful degradation: schema violation
+   returns a valid degraded card (200, `meta.degraded`) via `aggregator.degraded_card()`
+   instead of a 500. [DONE 2026-06-02k] Redis cache: pluggable backend
+   (`get_cache`/`set_cache`); set `REDIS_URL` for persistent/shared cache (native TTL),
+   else in-memory; best-effort (Redis outage = cache miss, not a 500). Remaining: secrets mgmt.
 6. Minor: review "Anthropic" wording in saved D617 Technologies Used; optionally fill
    D617 Demo URL / GitHub Link.
 

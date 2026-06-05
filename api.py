@@ -49,5 +49,13 @@ async def battlecard(
     try:
         jsonschema.validate(card, _SCHEMA)
     except jsonschema.ValidationError as exc:
-        raise HTTPException(status_code=500, detail=f"schema violation: {exc.message}")
+        # A synthesis regression produced an invalid card. Rather than 500 with no
+        # usable payload, fall back to a guaranteed-valid degraded (empty) card so
+        # the client gets a renderable, honestly-labeled response.
+        fallback = aggregator.degraded_card(domain, vs=vs, reason=f"schema violation: {exc.message}")
+        try:
+            jsonschema.validate(fallback, _SCHEMA)
+        except jsonschema.ValidationError as exc2:
+            raise HTTPException(status_code=500, detail=f"schema violation (no fallback): {exc2.message}")
+        return JSONResponse(fallback)
     return JSONResponse(card)
