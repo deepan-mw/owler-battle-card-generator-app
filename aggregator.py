@@ -1214,12 +1214,12 @@ _REQUIRED_KEYS = {  # mirrors battlecard.schema.json item-level `required`
 # model might follow. We neutralize both at the single chokepoint (_build_prompt).
 _PROMPT_TOKEN_RE = re.compile(r"<<\s*/?\s*(?:DATA|END)\s*>>|SECTION\s*=", re.I)
 _INJECTION_RE = re.compile(
-    r"(?i)\b(?:ignore|disregard|forget|override)\b[^.\n]{0,40}"
+    r"(?i)(?:\b(?:ignore|disregard|forget|override)\b[^.\n]{0,40}"
     r"\b(?:previous|prior|above|earlier|all)\b[^.\n]{0,20}"
     r"\b(?:instruction|prompt|direction|rule|context)s?\b"
-    r"|(?i)\b(?:system|developer)\s+prompt\b"
-    r"|(?i)\byou\s+are\s+now\b"
-    r"|(?i)\bnew\s+(?:instruction|rule|task)s?\b")
+    r"|\b(?:system|developer)\s+prompt\b"
+    r"|\byou\s+are\s+now\b"
+    r"|\bnew\s+(?:instruction|rule|task)s?\b)")
 _MAX_FIELD_LEN = 2000
 
 

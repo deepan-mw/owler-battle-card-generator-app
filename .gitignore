@@ -55,3 +55,5 @@ node_modules/
 # Deck/PDF render byproducts
 slide-*.jpg
 *.pdf
+*.pptx
+*_Notes.md
